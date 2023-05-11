@@ -1,0 +1,53 @@
+CREATE OR REPLACE PROCEDURE PRC_SN_ATIVO_CADASTRO(var_tabela    in varchar2
+                                         ,var_sn_ativo in varchar2
+                                         ,var_codigo   in int
+                                         ,var_usuario  in varchar2
+) IS
+
+BEGIN
+
+  --------
+  --TIPO--
+  --------
+
+  --IF TIPO
+  IF var_tabela = 'TIPO' THEN
+
+    UPDATE portal_cadastro.TIPO tp
+    SET tp.SN_ATIVO = var_sn_ativo,
+        tp.CD_USUARIO_ULT_ALT = var_usuario,
+        tp.HR_ULT_ALT = SYSDATE
+    WHERE tp.CD_TIPO = var_codigo;
+
+  END IF;
+  --FIM IF TIPO
+  
+---------------------------------------------
+  
+  --IF MODULO
+  IF var_tabela = 'MODULO' THEN
+
+    UPDATE portal_cadastro.MODULO mo
+    SET mo.SN_ATIVO = var_sn_ativo,
+        mo.CD_USUARIO_ULT_ALT = var_usuario,
+        mo.HR_ULT_ALT = SYSDATE
+    WHERE mo.CD_MODULO = var_codigo;
+
+  END IF;
+  --FIM IF MODULO
+  
+---------------------------------------------
+
+    --IF CONTROLE_PRODUTO
+  IF var_tabela = 'CONTROLE_PRODUTO' THEN
+
+    UPDATE portal_cadastro.CONTROLE_PRODUTO cp
+    SET cp.SN_ATIVO = var_sn_ativo,
+        cp.CD_USUARIO_ULT_ALT = var_usuario,
+        cp.HR_ULT_ALT = SYSDATE
+    WHERE cp.CD_CONTROLE_PRODUTO = var_codigo;
+
+  END IF;
+  --FIM IF CONTROLE_PRODUTO
+
+END;

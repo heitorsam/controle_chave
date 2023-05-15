@@ -25,16 +25,16 @@
 													CASE
 														WHEN :usuario IN (SELECT DISTINCT puia.CD_USUARIO
 																			FROM dbasgu.PAPEL_USUARIOS puia
-																			WHERE puia.CD_PAPEL = 452) THEN 'S' --PAPEL GERAL
+																			WHERE puia.CD_PAPEL = 460) THEN 'S' --PAPEL GERAL
 													END SN_USUARIO,
 
 													CASE
 														WHEN :usuario IN (SELECT DISTINCT puia.CD_USUARIO
 																			FROM dbasgu.PAPEL_USUARIOS puia
-																			WHERE puia.CD_PAPEL = 453) THEN 'S' --PAPEL ADM
+																			WHERE puia.CD_PAPEL = 461) THEN 'S' --PAPEL ADM
 													END SN_USUARIO_ADM
 
-												FROM DUAL");																															
+												FROM DUAL");																														
 												
 		oci_bind_by_name($result_usuario, ':usuario', $usuario);
 		oci_bind_by_name($result_usuario, ':senha', $senha);
@@ -51,28 +51,12 @@
 			
 			if($resultado[0] == 'Login efetuado com sucesso') {
 
-				$cons_acesso_login="INSERT INTO portal_projetos.ACESSO
-				SELECT portal_projetos.SEQ_CD_ACESSO.NEXTVAL AS CD_ACESSO,
-				40 AS CD_PORTFOLIO,
-				'INSPECAO SESMT' AS DS_PROJETO,
-				'$usuario' AS CD_USUARIO_ACESSO,
-				SYSDATE AS HR_ACESSO
-				FROM DUAL";
+				$_SESSION['usuarioLogin'] = $usuario;
+				$_SESSION['usuarioNome'] = $resultado[1];
+				$_SESSION['SN_USUARIO'] = $resultado[2];
+				$_SESSION['SN_USUARIO_ADM'] = $resultado[3];
 
-				$result_acesso = oci_parse($conn_ora,$cons_acesso_login);
-
-				$valida_acesso = oci_execute($result_acesso);
-
-				if($valida_acesso){
-
-					$_SESSION['usuarioLogin'] = $usuario;
-					$_SESSION['usuarioNome'] = $resultado[1];
-					$_SESSION['SN_USUARIO'] = $resultado[2];
-					$_SESSION['SN_USUARIO_ADM'] = $resultado[3];
-
-					header("Location: $pag_apos");
-
-				}
+				header("Location: $pag_apos");
 
 			} else { 
 				$_SESSION['msgerro'] = $resultado[0] . '!';

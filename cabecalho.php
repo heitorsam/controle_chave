@@ -26,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="img/logo/icone_santa_casa_sjc_colorido.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Inspeção Sesmt</title>
+    <title>Controle Chave</title>
     <!--CSS-->
     <?php 
         include 'css/style.php';
@@ -54,7 +54,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-color">
             <a class="navbar-brand" href="home.php">
                 <img src="img/logo/icone_santa_casa_sjc_branco.png" height="28px" width="28px" class="d-inline-block align-top efeito-zoom" alt="Santa Casa de São José dos Campos">
-                <h10>Inspeção Sesmt</h10>
+                <h10>Controle Chave</h10>
             </a>
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample06" aria-controls="navbarsExample06" aria-expanded="false" aria-label="Toggle navigation">

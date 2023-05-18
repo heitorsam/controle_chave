@@ -1,66 +1,3 @@
-
-<style>
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 23px;
-    }
-
-    .switch input { 
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #e05757;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-    input:checked + .slider {
-        background-color: #32BB53;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #32BB53;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* ANIMAÇÃO */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-    .slider.round:before {
-        border-radius: 50%;
-    }
-</style>
-
 <?php
 
     include '../../conexao.php';
@@ -108,18 +45,15 @@
                     
                         if ($row['TP_STATUS'] == 'A') {
 
-                            echo '<label class="switch">';
-                                echo '<input type="checkbox" checked>';
-                                echo '<span onclick="alterar_status_categoria('. $row['CD_CATEGORIA'] .')" class="slider round"></span>';
-                            echo '</label>';
+                            $tp_acao = 'stt';
 
+                            echo '<i style="font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
 
                         } else {
 
-                            echo '<label class="switch">';
-                                echo '<input type="checkbox">';
-                                echo '<span class="slider round"></span>';  
-                            echo '</label>';
+                            $tp_acao = 'stt';
+
+                            echo '<i style="font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
 
                         }
 
@@ -129,7 +63,9 @@
 
                         if ($row['QNTD_CHAVES'] == 0) {
 
-                            echo '<button onclick="chama_alerta_exclusao('.  $row['CD_CATEGORIA'] .')" class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button>';
+                            $tp_acao = 'del';
+
+                            echo '<button onclick="chama_alerta('.  $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\')" class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button>';
 
                         } else {
 
@@ -140,6 +76,7 @@
                     echo '</td>';
 
                 echo '</tr>';
+
             }
 
         ?>

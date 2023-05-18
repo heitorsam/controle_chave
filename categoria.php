@@ -98,9 +98,17 @@
 
     }
 
-    function chama_alerta_exclusao(cd_categoria) {
+    function chama_alerta(cd_categoria, tp_acao, status_atual=0) {
 
-        ajax_alert('Deseja excluir categoria?', 'exclui_categoria('+cd_categoria+')');
+        if (tp_acao == 'del') {
+
+            ajax_alert('Deseja excluir categoria?', 'exclui_categoria('+cd_categoria+')');
+
+        } else if (tp_acao == 'stt') {
+
+            ajax_alert('Deseja inativar o status da categoria?', 'alterar_status_categoria('+cd_categoria+',\''+status_atual+'\')'); 
+
+        }
 
     }
 
@@ -124,6 +132,8 @@
                     var_tp_msg = 'alert-success';
 
                 } else {
+
+                    console.log(res);
 
                     //MENSAGEM            
                     var_ds_msg = 'Erro%20ao%20excluir%20categoria.';
@@ -181,6 +191,8 @@
                             var_tp_msg = 'alert-success';
     
                         } else {
+
+                            console.log(res);
     
                             //MENSAGEM            
                             var_ds_msg = 'Erro%20ao%20editar%20categoria.';
@@ -209,9 +221,52 @@
 
     }
 
-    function alterar_status_categoria(cd_categoria) {
+    function alterar_status_categoria(cd_categoria, status_alterar) {
 
-        //alert(cd_categoria);
+        var toggle_status = 'A';
+
+        if (status_alterar == 'I') {
+
+            toggle_status = 'A'
+
+        } else {
+
+            toggle_status = 'I'
+
+        }
+
+        $.ajax({
+            url: "funcoes/categoria/update_altera_status.php",
+            method: "POST",
+            data: {
+                cd_categoria,
+                status_alterar: toggle_status
+            },
+            cache: false,
+            success(res) {
+
+                if (res == 'Sucesso') {
+
+                    $('#carrega_tabela_categoria').load('funcoes/categoria/ajax_tabela_categoria.php');
+
+                    //MENSAGEM            
+                    var_ds_msg = 'Status%20alterado%20com%20sucesso.';
+                    var_tp_msg = 'alert-success';
+
+                } else {
+
+                    console.log(res);
+
+                    //MENSAGEM            
+                    var_ds_msg = 'Erro%20ao%20alterar%20status.';
+                    var_tp_msg = 'alert-danger';
+
+                }
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+            }
+        })
 
     }
     

@@ -20,18 +20,18 @@
     <h11 style="margin-left: 10px;">Home</h11>
     <div class="div_br"> </div>    
 
-    <a href="relatorio_custos.php" class="botao_home" type="submit"><i class="fa-solid fa-address-card"></i> Registro</a></td></tr>
+    <a href="registro.php" class="botao_home" type="submit"><i class="fa-solid fa-address-card"></i> Registro</a></td></tr>
     <span class="espaco_pequeno"></span>
 
     <div class="div_br"></div>
 
     <h11 style="margin-left: 10px;">Administrador</h11>
-    <div class="div_br"> </div> 
+    <div class="div_br"> </div>
 
-    <a href="relatorio_custos.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>
+    <a href="chave.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>
     <span class="espaco_pequeno"></span>
 
-    <a href="relatorio_custos.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-folder-tree"></i> Categoria</a></td></tr>
+    <a href="categoria.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-folder-tree"></i> Categoria</a></td></tr>
     <span class="espaco_pequeno"></span>
 
 <?php

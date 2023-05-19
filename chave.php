@@ -140,9 +140,30 @@
 
     }
 
-    function alterar_status_chave() {
+    function alterar_status_chave(cd_chave, status_atual) {
 
-        alert('ok');
+        $.ajax({
+            url: "funcoes/chave/update_altera_status_chave.php",
+            method: "POST",
+            data: {
+                cd_chave,
+                status_atual
+            },
+            cache: false,
+            success(res) {
+
+                if (res == 'Sucesso') {
+
+
+
+                } else {
+
+
+
+                }
+
+            }
+        })
 
     }
 

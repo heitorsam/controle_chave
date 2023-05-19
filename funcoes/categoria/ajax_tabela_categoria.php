@@ -47,13 +47,13 @@
 
                             $tp_acao = 'stt';
 
-                            echo '<i style="font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
+                            echo '<i style="cursor: pointer; font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
 
                         } else {
 
                             $tp_acao = 'stt';
 
-                            echo '<i style="font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
+                            echo '<i style="cursor: pointer; font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CATEGORIA'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
 
                         }
 

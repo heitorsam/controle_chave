@@ -9,7 +9,6 @@
                                WHERE cat.CD_CATEGORIA = $cd_categoria";
 
     $res = oci_parse($conn_ora, $query_exclui_categoria);
-
     $valida = oci_execute($res);
 
     if (!$valida) {

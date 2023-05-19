@@ -106,7 +106,15 @@
 
         } else if (tp_acao == 'stt') {
 
-            ajax_alert('Deseja inativar o status da categoria?', 'alterar_status_categoria('+cd_categoria+',\''+status_atual+'\')'); 
+            var mensagem = 'Deseja inativar o status da categoria?';
+
+            if (status_atual == 'I') {
+
+                mensagem = 'Deseja ativar o status da categoria?';
+
+            }
+
+            ajax_alert(mensagem, 'alterar_status_categoria('+cd_categoria+',\''+status_atual+'\')'); 
 
         }
 

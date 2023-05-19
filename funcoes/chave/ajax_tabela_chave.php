@@ -46,7 +46,23 @@
                     echo '<td class="align-middle">'. $row['CD_CHAVE'] .'</td>';
                     echo '<td class="align-middle">'. $row['DS_CHAVE'] .'</td>';
                     echo '<td class="align-middle">'. $row['DS_CATEGORIA'] .'</td>';
-                    echo '<td class="align-middle">'. $row['TP_STATUS'] .'</td>';
+                    echo '<td class="align-middle">';
+
+                        if ($row['TP_STATUS'] == 'A') {
+
+                            $tp_acao = 'stt';
+
+                            echo '<i style="cursor: pointer; font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
+
+                        } else {
+
+                            $tp_acao = 'stt';
+
+                            echo '<i style="cursor: pointer; font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
+
+                        }
+                        
+                    echo '</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
                     echo '<td class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
                     echo '<td><button class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button></td>';

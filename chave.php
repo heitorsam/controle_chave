@@ -2,6 +2,8 @@
 
     include 'cabecalho.php';
 
+    include 'config/mensagem/ajax_mensagem_alert.php';
+
 ?>
 
     <div id="mensagem_acao"></div>
@@ -113,6 +115,34 @@
             })
 
         }
+
+    }
+
+    function chama_alerta(cd_chave, tp_acao, status_atual=0) {
+
+        if (tp_acao == 'del') {
+
+            //ajax_alert('Deseja excluir chave?', 'exclui_chave('+cd_chave+')');
+
+        } else if (tp_acao == 'stt') {
+
+            var mensagem = 'Deseja inativar o status da chave?';
+
+            if (status_atual == 'I') {
+
+                mensagem = 'Deseja ativar o status da chave?';
+
+            }
+
+            ajax_alert(mensagem, 'alterar_status_chave('+cd_chave+',\''+status_atual+'\')'); 
+
+        }
+
+    }
+
+    function alterar_status_chave() {
+
+        alert('ok');
 
     }
 

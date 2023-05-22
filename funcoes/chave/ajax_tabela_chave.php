@@ -44,7 +44,10 @@
                 echo '<tr style="text-align: center">';
 
                     echo '<td class="align-middle">'. $row['CD_CHAVE'] .'</td>';
-                    echo '<td class="align-middle">'. $row['DS_CHAVE'] .'</td>';
+                    echo '<td class="align-middle" id="'. $row['CD_CHAVE'] .'" style="cursor: pointer;" 
+                        ondblclick="editar_chave(\''.$row['CD_CHAVE'].'\',\''. $row['DS_CHAVE'] .'\')">'. 
+                            $row['DS_CHAVE'] 
+                        .'</td>';
                     echo '<td class="align-middle">'. $row['DS_CATEGORIA'] .'</td>';
                     echo '<td class="align-middle">';
 
@@ -65,7 +68,22 @@
                     echo '</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
                     echo '<td class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
-                    echo '<td><button class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button></td>';
+
+                    echo '<td class="align-middle">';
+
+                        if ($row['QTD_REGISTROS'] == 0) {
+
+                            $tp_acao = 'del';
+
+                            echo '<button onclick="chama_alerta('.  $row['CD_CHAVE'] . ',\'' . $tp_acao . '\')" class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button>';
+
+                        } else {
+
+                            echo ' <button class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i></button>';
+
+                        }
+
+                    echo '</td>';
 
                 echo '</tr>';
 

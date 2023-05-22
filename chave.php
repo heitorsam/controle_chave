@@ -37,7 +37,7 @@
     <div class="div_br"></div>
     <div class="div_br"></div>
 
-    <div id="carreta_tabela_chave"></div>
+    <div id="carrega_tabela_chave"></div>
 
 <?php
 
@@ -49,8 +49,79 @@
 
     window.onload = function() {
 
-        $('#carreta_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
         $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
+
+    }
+
+    function editar_chave(cd_chave, ds_chave) {
+
+        // PEGA O TD PELO ID
+        td_chave = document.getElementById(cd_chave);
+
+        // CRIA UM NOVO ELEMENTO INPUT
+        var titulo = document.createElement('input');
+
+        titulo.value = ds_chave;
+
+        titulo.className = 'form form-control';
+
+        // ADICIONA INPUT NO <td>
+        td_chave.appendChild(titulo);
+
+        titulo.focus()
+
+        // APÓS TIRAR O FOCO DO ELEMENTO, PROSSEGUE PARA EDIÇÃO
+        titulo.addEventListener('blur', function() {   
+
+            if (ds_chave != titulo.value) {
+
+                $.ajax({
+                    url: "funcoes/chave/update_chave.php",
+                    method: "POST",
+                    data: {
+                        nova_ds_chave: titulo.value,
+                        cd_chave: cd_chave
+                    },
+                    cache: false,
+                    success(res) {
+
+                        if (res == 'Sucesso') {
+
+                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+
+                            //MENSAGEM            
+                            var_ds_msg = 'Chave%20alterada%20com%20sucesso.';
+                            var_tp_msg = 'alert-success';
+
+                        } else {
+
+                            console.log(res);
+
+                            //MENSAGEM            
+                            var_ds_msg = 'Erro%20ao%20editar%20chave.';
+                            var_tp_msg = 'alert-danger';
+
+                            // REMOVE O ELEMENTO INPUT E VOLTA O ANTIGO TEXT
+                            td_chave.removeChild(titulo);
+                            td_chave.innerText = ds_categoria;
+
+                        }
+
+                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+                    }
+                })
+
+            } else {
+
+                // REMOVE O ELEMENTO INPUT E VOLTA O ANTIGO TEXT
+                td_chave.removeChild(titulo);
+                td_chave.innerText = ds_categoria;
+
+            }
+
+        })
 
     }
 
@@ -93,7 +164,7 @@
 
                     if (res == 'Sucesso') {
 
-                        $('#carreta_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
 
                         //MENSAGEM            
                         var_ds_msg = 'Chave%20cadastrada%20com%20sucesso.';
@@ -109,6 +180,8 @@
 
                     }
 
+                    descricao.value = '';
+
                     $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
                 }
@@ -122,7 +195,7 @@
 
         if (tp_acao == 'del') {
 
-            //ajax_alert('Deseja excluir chave?', 'exclui_chave('+cd_chave+')');
+            ajax_alert('Deseja excluir chave?', 'exclui_chave('+cd_chave+')');
 
         } else if (tp_acao == 'stt') {
 
@@ -142,25 +215,84 @@
 
     function alterar_status_chave(cd_chave, status_atual) {
 
+        var toggle_status = 'A';
+
+        if (status_atual == 'I') {
+
+            toggle_status = 'A'
+
+        } else {
+
+            toggle_status = 'I'
+
+        }
+
         $.ajax({
             url: "funcoes/chave/update_altera_status_chave.php",
             method: "POST",
             data: {
                 cd_chave,
-                status_atual
+                toggle_status
             },
             cache: false,
             success(res) {
 
                 if (res == 'Sucesso') {
 
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
 
+                    //MENSAGEM            
+                    var_ds_msg = 'Status%20alterado%20com%20sucesso.';
+                    var_tp_msg = 'alert-success';
 
                 } else {
 
+                    console.log(res);
 
+                    //MENSAGEM            
+                    var_ds_msg = 'Erro%20ao%20alterar%20status.';
+                    var_tp_msg = 'alert-danger';
 
                 }
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+            }
+
+        })
+
+    }
+
+    function exclui_chave(cd_chave) {
+
+        $.ajax({
+            url: "funcoes/chave/excluir_chave.php",
+            method: "POST",
+            data: {
+                cd_chave
+            },
+            cache: false,
+            success(res) {
+
+                if (res === 'Sucesso') {
+
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+
+                    //MENSAGEM            
+                    var_ds_msg = 'Chave%20excluída%20com%20sucesso.';
+                    var_tp_msg = 'alert-success';
+
+                } else {
+
+                    console.log(res);
+
+                    //MENSAGEM            
+                    var_ds_msg = 'Erro%20ao%20excluir%20chave.';
+                    var_tp_msg = 'alert-danger';
+
+                }
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
             }
         })

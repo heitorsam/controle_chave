@@ -67,7 +67,7 @@
                         
                     echo '</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
-                    echo '<td class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
+                    echo '<td onclick="modal_qrcode()" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 
                     echo '<td class="align-middle">';
 

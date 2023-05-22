@@ -39,6 +39,35 @@
 
     <div id="carrega_tabela_chave"></div>
 
+    <!-- MODAL QR CODE -->
+    <div class="modal fade" id="modal_qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="titulo_modal">QR Code</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div id="conteudo_modal" class="modal-body">
+                ...
+            </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 <?php
 
     include 'rodape.php';
@@ -58,6 +87,8 @@
 
         // PEGA O TD PELO ID
         td_chave = document.getElementById(cd_chave);
+
+        td_chave.innerText = '';
 
         // CRIA UM NOVO ELEMENTO INPUT
         var titulo = document.createElement('input');
@@ -117,11 +148,17 @@
 
                 // REMOVE O ELEMENTO INPUT E VOLTA O ANTIGO TEXT
                 td_chave.removeChild(titulo);
-                td_chave.innerText = ds_categoria;
+                td_chave.innerText = ds_chave;
 
             }
 
         })
+
+    }
+
+    function modal_qrcode() {
+
+        $('#modal_qrcode').modal('show');
 
     }
 

@@ -7,27 +7,29 @@
     $cracha = $_GET['cracha'];
 
     $cons_registro = "SELECT CD_REGISTRO
-                      FROM controle_chave.REGISTRO reg
-                      WHERE reg.CD_USUARIO_MV = '$cracha'";
+                  FROM controle_chave.REGISTRO reg
+                  WHERE reg.CD_USUARIO_MV = '$cracha'";
 
     $res = oci_parse($conn_ora, $cons_registro);
     $valida = oci_execute($res);
 
     if (!$valida) {
 
-        echo $cons_registro;
+        //echo $cons_registro;
 
     } else {
 
-        if (oci_fetch_row($res) > 0) {
-    
+       $row = oci_fetch_array($res);
+
+       if (!empty($row)) {
+
             echo 'S';
-    
-        } else {
-    
+
+       } else {
+
             echo 'N';
-    
-        }
+
+       }
 
     }
 

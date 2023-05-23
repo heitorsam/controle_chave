@@ -51,8 +51,6 @@
                 cache: false,
                 success(res) {
 
-                    console.log(res)
-
                     if (res != 'S' && res != 'N') {
 
                         console.log(res);
@@ -76,9 +74,7 @@
                                 
                                 $('#carrega_acao_registro').load('funcoes/registro/devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria);
 
-                            });
-
-                            
+                            });                            
 
                         } else {
 

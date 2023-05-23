@@ -47,6 +47,9 @@
     <!--JQUERY-->    
     <script src="js/jquery_3_6_4.min.js"></script>
 
+    <!-- QR CODE -->
+    <script src="teste_qr/qrcodejs-master/qrcode.min.js"></script>
+
 </head>
 <body>
     <header>    

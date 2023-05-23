@@ -59,7 +59,7 @@
             </div>
 
             <div id="conteudo_modal" class="modal-body">
-                ...
+                <div style="margin: 0 auto; width: 200px;" id="qrcode"></div>
             </div>
 
             </div>
@@ -156,9 +156,11 @@
 
     }
 
-    function modal_qrcode() {
+    function modal_qrcode(valor) {
 
         $('#modal_qrcode').modal('show');
+
+        gerarQRCode(valor);
 
     }
 
@@ -333,6 +335,25 @@
 
             }
         })
+
+    }
+
+    function gerarQRCode(valor) {
+
+        // PEGA O ESPAÇO DE RENDERIZAR O QR CODE
+        var espaco_qrcode = document.getElementById("qrcode");
+
+        // LIMPA O ESPAÇO CASO JÁ EXISTA PARA RENDERIZAR UM NOVO
+        espaco_qrcode.innerHTML = '';
+
+        // MONTA O QR CODE
+        var qrcode = new QRCode(espaco_qrcode, {
+
+            text: `${valor}`,
+            width: 210,
+            height: 210
+
+        });
 
     }
 

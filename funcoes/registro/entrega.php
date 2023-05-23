@@ -3,12 +3,25 @@
 
 <div class="row">
 
-    <div class="col-sm-6">
-        QR Code:
+    <div class="col-sm-3">
+        Código chave:
+        <input id="cd_chave" class="form form-control" type="text">
     </div>
 
 </div>
 
 <div class="div_br"></div>
 
-<button style="text-align: center;" class="btn btn-primary">Concluir</button>
+<div id="carrega_entrega_chave"></div>
+
+<script>
+
+    var cd_chave = document.getElementById('cd_chave');
+
+    cd_chave.addEventListener('change', function() { 
+    
+        
+
+    })
+
+</script>

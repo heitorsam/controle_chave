@@ -15,7 +15,7 @@
 
     if (!$valida) {
 
-        //echo $cons_registro;
+        echo $cons_registro;
 
     } else {
 

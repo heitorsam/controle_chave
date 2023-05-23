@@ -72,7 +72,7 @@
                                 var ds_chave = dados['DS_CHAVE'].replace(' ', '%20');
                                 var ds_categoria = dados['DS_CATEGORIA'].replace(' ', '%20');
                                 
-                                $('#carrega_acao_registro').load('funcoes/registro/devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria);
+                                $('#carrega_acao_registro').load('funcoes/registro/devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria + '&cdchave=' + dados['CD_CHAVE']);
 
                             });                            
 

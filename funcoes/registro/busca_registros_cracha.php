@@ -8,7 +8,8 @@
 
     $cons_registro_dados = "SELECT reg.CD_REGISTRO,
                             ch.DS_CHAVE,
-                            cat.DS_CATEGORIA
+                            cat.DS_CATEGORIA,
+                            reg.CD_CHAVE
                         FROM controle_chave.REGISTRO reg
                         INNER JOIN controle_chave.CHAVE ch
                         ON reg.CD_CHAVE = ch.CD_CHAVE

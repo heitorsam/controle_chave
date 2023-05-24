@@ -28,10 +28,23 @@
 
             var dados = JSON.parse(data);
 
-            var ds_chave = dados['DS_CHAVE'].replace(' ', '%20');
-            var ds_categoria = dados['DS_CATEGORIA'].replace(' ', '%20');
+            var ds_chave = dados['DS_CHAVE'];
+            var ds_categoria = dados['DS_CATEGORIA'];
+
+            if (ds_chave.indexOf(' ') != -1) {
+
+                ds_chave = ds_chave.replace(' ', '%20');
+
+            }
+
+            if (ds_categoria.indexOf(' ') != -1) {
+            
+                ds_categoria = ds_categoria.replace(' ', '%20');
+
+            }
 
             // CHAMAR AJAX ENTREGA
+            $('#carrega_entrega_chave').load('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria);
 
         })
 

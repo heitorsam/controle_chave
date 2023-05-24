@@ -69,16 +69,28 @@
 
                                 var dados = JSON.parse(data);
 
-                                var ds_chave = dados['DS_CHAVE'].replace(' ', '%20');
-                                var ds_categoria = dados['DS_CATEGORIA'].replace(' ', '%20');
+                                var ds_chave = dados['DS_CHAVE'];
+                                var ds_categoria = dados['DS_CATEGORIA'];
+
+                                if (ds_chave.indexOf(' ') != -1) {
+
+                                    ds_chave = ds_chave.replace(' ', '%20');
+
+                                }
+
+                                if (ds_categoria.indexOf(' ') != -1) {
                                 
-                                $('#carrega_acao_registro').load('funcoes/registro/devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria + '&cdchave=' + dados['CD_CHAVE']);
+                                    ds_categoria = ds_categoria.replace(' ', '%20');
+
+                                }
+                                
+                                $('#carrega_acao_registro').load('funcoes/registro/ajax_devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria + '&cdchave=' + dados['CD_CHAVE']);
 
                             });                            
 
                         } else {
 
-                            $('#carrega_acao_registro').load('funcoes/registro/entrega.php');
+                            $('#carrega_acao_registro').load('funcoes/registro/ajax_entrega.php');
                     
                         }
                         

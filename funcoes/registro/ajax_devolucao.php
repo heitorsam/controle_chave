@@ -13,12 +13,12 @@
 
     <div class="row">
 
-        <div class="col-sm-6">
+        <div class="col-md-6">
             Chave:
             <input value="<?php echo $chave; ?>" class="form form-control" type="text" readonly>
         </div>
     
-        <div class="col-sm-6">
+        <div class="col-md-6">
             Categoria:
             <input value="<?php echo $categoria; ?>" class="form form-control" type="text" readonly>
         </div>
@@ -29,7 +29,7 @@
 
     <div class="row">
 
-        <div class="col-sm-12">
+        <div class="col-md-12">
 
             Observação:
             <input class="form form-control" type="text">
@@ -46,7 +46,7 @@
 
 <div style="float: right; width: 40%; padding: 20px 0px 0px 150px;">
 
-    <div class="col-sm-12" style="float: left;">
+    <div class="col-md-12" style="float: left;">
         <div style="width: 150px;" id="qrcode"></div>
     </div>
 

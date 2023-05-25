@@ -4,16 +4,28 @@
 
     include '../../config/mensagem/ajax_mensagem_alert.php';
 
-    $cons_tabela_chave = "SELECT ch.CD_CHAVE,
-                                ch.DS_CHAVE,
-                                cat.DS_CATEGORIA,
-                                ch.TP_STATUS,
-                                (SELECT COUNT(reg.CD_REGISTRO)
-                                FROM controle_chave.REGISTRO reg
-                                WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS
+    $cons_tabela_chave = "SELECT res.CD_CHAVE,
+                                res.DS_CHAVE,
+                                res.DS_CATEGORIA,
+                                res.TP_STATUS,
+                                res.QTD_REGISTROS,
+                                CASE
+                                    WHEN res.RESPONSAVEL_CHAVE IS NULL THEN 'NÃO HÁ RESPONSÁVEL'
+                                    ELSE res.RESPONSAVEL_CHAVE
+                                END AS RESPONSAVEL
+                            FROM (SELECT ch.CD_CHAVE,
+                                    ch.DS_CHAVE,
+                                    cat.DS_CATEGORIA,
+                                    ch.TP_STATUS,
+                                    (SELECT COUNT(reg.CD_REGISTRO)
+                                    FROM controle_chave.REGISTRO reg
+                                    WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
+                                    (SELECT reg.CD_USUARIO_MV                  
+                                    FROM controle_chave.REGISTRO reg
+                                    WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS RESPONSAVEL_CHAVE
                             FROM controle_chave.CHAVE ch
                             INNER JOIN controle_chave.CATEGORIA cat
-                                ON ch.CD_CATEGORIA = cat.CD_CATEGORIA";
+                                ON ch.CD_CATEGORIA = cat.CD_CATEGORIA) res";
 
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 
@@ -29,7 +41,7 @@
         <th class="p-2" style="text-align: center; white-space: nowrap;">Descrição</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Categoria</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Status</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Registros</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Responsável</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">QR Code</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Opções</th>
 
@@ -66,7 +78,7 @@
                         }
                         
                     echo '</td>';
-                    echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
+                    echo '<td class="align-middle">'. $row['RESPONSAVEL'] .'</td>';
                     echo '<td onclick="modal_qrcode('. $row['CD_CHAVE'] .')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 
                     echo '<td class="align-middle">';

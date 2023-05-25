@@ -9,11 +9,11 @@
 
 <div class="row">
 
-    <div class="col-sm-6">
+    <div class="col-md-6 col-sm-12">
         <input value="<?php echo $ds_chave; ?>" class="form form-control" type="text" readonly>
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-md-6 col-sm-12">
         <input value="<?php echo $ds_categoria; ?>" class="form form-control" type="text" readonly>
     </div>
 
@@ -23,21 +23,21 @@
 
 <div class="row">
 
-    <div class="col-sm-4">
+    <div class="col-md-4">
         Setor:
-        <select class="form form-control" name="" id="">
-            <option value="">teste</option>
+        <select class="form form-control" name="" id="selecao_setores">
+
         </select>
     </div>
 
-    <div class="col-sm-3">
+    <div class="col-md-2">
         Ramal:
-        <input class="form form-control" type="text">
+        <input class="form form-control" type="text" id="inpt_ramal">
     </div>
 
-    <div class="col-sm-5">
+    <div class="col-md-6">
         Contato:
-        <input class="form form-control" type="text">
+        <input class="form form-control" type="text" id="inpt_contato">
     </div>
 
 </div>
@@ -46,9 +46,17 @@
 
 <div class="row">
 
-    <div class="col-sm-12">
+    <div class="col-md-12">
         Observação:
-        <input class="form form-control" type="text">
+        <input class="form form-control" type="text" id="inpt_observacao">
     </div>
+
+</div>
+
+<div class="div_br"></div>
+
+<div style="width: 100%;">
+
+    <button onclick="registrar_entrega()" id="btn_concluir_registro" style="float: right;" class="botao_home">Concluir</button>
 
 </div>

@@ -42,61 +42,77 @@
         // CRIA EVENTO DE CHANGE PARA INSERIR O CRACHÁ
         cracha.addEventListener('change', function() {
 
-            $.ajax({
-                url: "funcoes/registro/valida_registro.php",
-                method: "GET",
-                data: {
-                    cracha: cracha.value
-                },
-                cache: false,
-                success(res) {
+            $.post('funcoes/registro/valida_funcionario.php', { cracha: cracha.value }, function(data) {
 
-                    if (res != 'S' && res != 'N') {
+                if (data == 'Sucesso') {
 
-                        console.log(res);
-
-                        //MENSAGEM            
-                        var_ds_msg = 'Erro%20buscar%20usuário.';
-                        var_tp_msg = 'alert-danger';
-
-                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
-
-                    } else {
-
-                        if (res == 'S') {
-
-                            $.post( "funcoes/registro/busca_registros_cracha.php?cracha=" + cracha.value, function( data ) {
-
-                                var dados = JSON.parse(data);
-
-                                var ds_chave = dados['DS_CHAVE'];
-                                var ds_categoria = dados['DS_CATEGORIA'];
-
-                                if (ds_chave.indexOf(' ') != -1) {
-
-                                    ds_chave = ds_chave.replace(' ', '%20');
-
+                    $.ajax({
+                        url: "funcoes/registro/valida_registro.php",
+                        method: "GET",
+                        data: {
+                            cracha: cracha.value
+                        },
+                        cache: false,
+                        success(res) {
+        
+                            if (res != 'S' && res != 'N') {
+        
+                                console.log(res);
+        
+                                //MENSAGEM            
+                                var_ds_msg = 'Erro%20buscar%20usuário.';
+                                var_tp_msg = 'alert-danger';
+        
+                                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+        
+                            } else {
+        
+                                if (res == 'S') {
+        
+                                    $.post( "funcoes/registro/busca_registros_cracha.php?cracha=" + cracha.value, function( data ) {
+        
+                                        var dados = JSON.parse(data);
+        
+                                        var ds_chave = dados['DS_CHAVE'];
+                                        var ds_categoria = dados['DS_CATEGORIA'];
+        
+                                        if (ds_chave.indexOf(' ') != -1) {
+        
+                                            ds_chave = ds_chave.replace(' ', '%20');
+        
+                                        }
+        
+                                        if (ds_categoria.indexOf(' ') != -1) {
+                                        
+                                            ds_categoria = ds_categoria.replace(' ', '%20');
+        
+                                        }
+                                        
+                                        $('#carrega_acao_registro').load('funcoes/registro/ajax_devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria + '&cdchave=' + dados['CD_CHAVE']);
+        
+                                    });                            
+        
+                                } else {
+        
+                                    $('#carrega_acao_registro').load('funcoes/registro/ajax_entrega.php');
+                            
                                 }
-
-                                if (ds_categoria.indexOf(' ') != -1) {
                                 
-                                    ds_categoria = ds_categoria.replace(' ', '%20');
-
-                                }
-                                
-                                $('#carrega_acao_registro').load('funcoes/registro/ajax_devolucao.php?chave=' + ds_chave + '&categoria=' + ds_categoria + '&cdchave=' + dados['CD_CHAVE']);
-
-                            });                            
-
-                        } else {
-
-                            $('#carrega_acao_registro').load('funcoes/registro/ajax_entrega.php');
-                    
+                            }
+        
                         }
-                        
-                    }
+                    })
+
+                } else {
+
+                    //MENSAGEM            
+                    var_ds_msg = 'Funcionário%20inativo%20e/ou%20incorreto.';
+                    var_tp_msg = 'alert-danger';
+        
+                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
                 }
+
             })
 
         })

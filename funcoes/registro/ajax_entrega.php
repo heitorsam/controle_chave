@@ -27,7 +27,6 @@
         $.post('funcoes/registro/busca_registros_chave.php?idchave=' + cd_chave, function(data) {
 
             var dados = JSON.parse(data);
-
             var ds_chave = dados['DS_CHAVE'];
             var ds_categoria = dados['DS_CATEGORIA'];
 
@@ -44,10 +43,28 @@
             }
 
             // CHAMAR AJAX ENTREGA
-            $('#carrega_entrega_chave').load('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria);
+            $.get('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria, function(data) {
+
+                document.getElementById('carrega_entrega_chave').innerHTML = data;
+
+                // PREENCHE OS SETORES DO MV NO SELECT
+                $('#selecao_setores').load('funcoes/registro/query_setores.php');
+
+            });
 
         })
 
     })
+
+    function registrar_entrega() {
+
+        var setor = document.getElementById('selecao_setores');
+        var ramal = document.getElementById('inpt_ramal');
+        var contato = document.getElementById('inpt_contato');
+        var observacao = document.getElementById('inpt_observacao');
+
+        alert(ramal.value);
+
+    }
 
 </script>

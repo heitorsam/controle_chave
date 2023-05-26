@@ -4,31 +4,32 @@
 
     include '../../config/mensagem/ajax_mensagem_alert.php';
 
-    $cons_tabela_chave = "SELECT res.CD_CHAVE,
-                                res.DS_CHAVE,
-                                res.DS_CATEGORIA,
-                                res.TP_STATUS,
-                                res.QTD_REGISTROS,
-                                CASE
-                                    WHEN res.RESPONSAVEL_CHAVE IS NULL THEN 'SEM RESPONSÁVEL'
-                                    ELSE vfc.NM_RESUMIDO
-                                END AS RESPONSAVEL
-                            FROM (SELECT ch.CD_CHAVE,
-                                    ch.DS_CHAVE,
-                                    cat.DS_CATEGORIA,
-                                    ch.TP_STATUS,
-                                    (SELECT COUNT(reg.CD_REGISTRO)
-                                    FROM controle_chave.REGISTRO reg
-                                    WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
-                                    (SELECT reg.CD_USUARIO_MV                  
-                                    FROM controle_chave.REGISTRO reg
-                                    WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS RESPONSAVEL_CHAVE
-                            FROM controle_chave.CHAVE ch
-                            INNER JOIN controle_chave.CATEGORIA cat
-                                ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
-                                ) res                                
-                            LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                ON vfc.CRACHA = res.RESPONSAVEL_CHAVE";
+    $cons_tabela_chave = "   SELECT res.CD_CHAVE,
+                                    res.DS_CHAVE,
+                                    res.DS_CATEGORIA,
+                                    res.TP_STATUS,
+                                    res.QTD_REGISTROS,
+                                    CASE
+                                        WHEN res.RESPONSAVEL_CHAVE IS NULL THEN 'SEM RESPONSÁVEL'
+                                        ELSE vfc.NM_RESUMIDO
+                                    END AS RESPONSAVEL
+                                FROM (SELECT ch.CD_CHAVE,
+                                        ch.DS_CHAVE,
+                                        cat.DS_CATEGORIA,
+                                        ch.TP_STATUS,
+                                        (SELECT COUNT(reg.CD_REGISTRO)
+                                        FROM controle_chave.REGISTRO reg
+                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
+                                        (SELECT reg.CD_USUARIO_MV                 
+                                        FROM controle_chave.REGISTRO reg
+                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE
+                                            AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
+                                FROM controle_chave.CHAVE ch
+                                INNER JOIN controle_chave.CATEGORIA cat
+                                    ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
+                                    ) res                                
+                                LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
+                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE";
 
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 

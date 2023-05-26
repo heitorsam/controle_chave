@@ -7,8 +7,9 @@
     $cracha = $_GET['cracha'];
 
     $cons_registro = "SELECT CD_REGISTRO
-                  FROM controle_chave.REGISTRO reg
-                  WHERE reg.CD_USUARIO_MV = '$cracha'";
+                      FROM controle_chave.REGISTRO reg
+                      WHERE reg.CD_USUARIO_MV = '$cracha'
+                      AND reg.TP_REGISTRO = 'C'";
 
     $res = oci_parse($conn_ora, $cons_registro);
     $valida = oci_execute($res);

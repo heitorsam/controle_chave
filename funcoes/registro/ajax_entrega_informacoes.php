@@ -57,6 +57,6 @@
 
 <div style="width: 100%;">
 
-    <button onclick="registrar_entrega()" id="btn_concluir_registro" style="float: right;" class="botao_home">Concluir</button>
+    <button onclick="registrar_entrega()" id="btn_concluir_registro" style="float: right;" class="botao_home"><i class="fa-solid fa-arrow-right-from-bracket"></i> Retirar</button>
 
 </div>

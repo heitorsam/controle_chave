@@ -1,4 +1,4 @@
-<h11><i class="fa-solid fa-arrow-right-to-bracket efeito-zoom"></i> Entrega</h11>
+<h11><i class="fa-solid fa-key efeito-zoom"></i> Retirada</h11>
 <div class="div_br"></div>    
 
 <div class="row">
@@ -98,6 +98,8 @@
         var observacao = document.getElementById('inpt_observacao');
 
         alert(ramal.value);
+
+        //insert_registro_entrega.php --PAGINA AJAX QUE VAI INSERIR
 
     }
 

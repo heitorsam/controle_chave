@@ -21,6 +21,12 @@
 
         </div>
 
+        <div class="col-sm-4">
+            
+            <div id="div_usu_resumido"></div>
+
+        </div>
+
     </div>
 
     <div class="div_br"></div>
@@ -41,6 +47,9 @@
 
         // CRIA EVENTO DE CHANGE PARA INSERIR O CRACHÁ
         cracha.addEventListener('change', function() {
+
+
+            $('#div_usu_resumido').load('funcoes/usuario/ajax_exibe_nm_resumido.php?varcracha='+cracha.value);
 
             $.post('funcoes/registro/valida_funcionario.php', { cracha: cracha.value }, function(data) {
 
@@ -66,6 +75,8 @@
                                 $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
         
                             } else {
+
+                               
         
                                 if (res == 'S') {
         
@@ -102,6 +113,8 @@
         
                         }
                     })
+
+                    $('#div_usu_resumido').load('funcoes/usuario/ajax_exibe_nm_resumido.php?varcracha='+cracha.value);
 
                 } else  {
 

@@ -1,10 +1,10 @@
-<h11>Entrega</h11>
+<h11><i class="fa-solid fa-arrow-right-to-bracket efeito-zoom"></i> Entrega</h11>
 <div class="div_br"></div>    
 
 <div class="row">
 
     <div class="col-sm-3">
-        Código chave:
+        Chave:
         <input id="cd_chave" class="form form-control" type="number">
     </div>
 

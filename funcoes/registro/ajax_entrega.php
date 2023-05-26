@@ -5,7 +5,7 @@
 
     <div class="col-sm-3">
         Código chave:
-        <input id="cd_chave" class="form form-control" type="text">
+        <input id="cd_chave" class="form form-control" type="number">
     </div>
 
 </div>
@@ -20,37 +20,71 @@
 
     var cd_chave = inpt_chave.value;
 
-    inpt_chave.addEventListener('change', function() { 
+    inpt_chave.addEventListener('change', function() {
 
         var cd_chave = inpt_chave.value;
-    
-        $.post('funcoes/registro/busca_registros_chave.php?idchave=' + cd_chave, function(data) {
 
-            var dados = JSON.parse(data);
-            var ds_chave = dados['DS_CHAVE'];
-            var ds_categoria = dados['DS_CATEGORIA'];
+        $.post('funcoes/registro/valida_chave.php', { idchave: cd_chave }, function(chave) {
 
-            if (ds_chave.indexOf(' ') != -1) {
+            if (chave == 'Sucesso') {
+                
+                $.post('funcoes/registro/busca_registros_chave.php?idchave=' + cd_chave, function(data) {
+        
+                    var dados = JSON.parse(data);
+                    var ds_chave = dados['DS_CHAVE'];
+                    var ds_categoria = dados['DS_CATEGORIA'];
+        
+                    if (ds_chave.indexOf(' ') != -1) {
+        
+                        ds_chave = ds_chave.replace(' ', '%20');
+        
+                    }
+        
+                    if (ds_categoria.indexOf(' ') != -1) {
+                    
+                        ds_categoria = ds_categoria.replace(' ', '%20');
+        
+                    }
+        
+                    // CHAMAR AJAX ENTREGA
+                    $.get('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria, function(data) {
+        
+                        document.getElementById('carrega_entrega_chave').innerHTML = data;
+        
+                        // PREENCHE OS SETORES DO MV NO SELECT
+                        $('#selecao_setores').load('funcoes/registro/query_setores.php');
+        
+                    });
+        
+                })
 
-                ds_chave = ds_chave.replace(' ', '%20');
+            } else if (chave == 'Chave em uso') {
+
+                //MENSAGEM            
+                var_ds_msg = 'Chave%20já%20está%20em%20uso.';
+                var_tp_msg = 'alert-danger';
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+            } else if (chave == 'Não cadastrada') {
+
+                //MENSAGEM            
+                var_ds_msg = 'Chave%20inexistente.';
+                var_tp_msg = 'alert-danger';
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+            } else {
+
+                console.log(chave)
+
+                //MENSAGEM            
+                var_ds_msg = 'Erro%20ao%20buscar%20chave.';
+                var_tp_msg = 'alert-danger';
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
             }
-
-            if (ds_categoria.indexOf(' ') != -1) {
-            
-                ds_categoria = ds_categoria.replace(' ', '%20');
-
-            }
-
-            // CHAMAR AJAX ENTREGA
-            $.get('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria, function(data) {
-
-                document.getElementById('carrega_entrega_chave').innerHTML = data;
-
-                // PREENCHE OS SETORES DO MV NO SELECT
-                $('#selecao_setores').load('funcoes/registro/query_setores.php');
-
-            });
 
         })
 

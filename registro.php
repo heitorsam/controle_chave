@@ -103,13 +103,16 @@
                         }
                     })
 
-                } else {
+                } else  {
 
                     //MENSAGEM            
                     var_ds_msg = 'Funcionário%20inativo%20e/ou%20incorreto.';
                     var_tp_msg = 'alert-danger';
+
+                    cracha.value = '';
         
                     $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
 
                 }
 

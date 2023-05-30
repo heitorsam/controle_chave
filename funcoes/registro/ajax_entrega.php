@@ -21,6 +21,9 @@
     var cd_chave = inpt_chave.value;
 
     inpt_chave.addEventListener('change', function() {
+        
+        var acao_entrega = document.getElementById('carrega_entrega_chave');
+        acao_entrega.innerText = '';
 
         var cd_chave = inpt_chave.value;
 

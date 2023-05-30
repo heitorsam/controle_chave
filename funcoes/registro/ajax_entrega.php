@@ -74,6 +74,15 @@
 
                 $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
+            } else if (chave == 'Chave inativa') {
+            
+                //MENSAGEM            
+                var_ds_msg = 'Chave%20inativa%20no%20sistema.';
+                var_tp_msg = 'alert-danger';
+
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
+
             } else {
 
                 console.log(chave)

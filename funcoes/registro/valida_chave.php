@@ -5,7 +5,8 @@
     $cd_chave = $_POST['idchave'];
 
     // CONSULTA PARA VERIFICAR SE A CHAVE EXISTE
-    $cons_busca_chave = "SELECT ch.DS_CHAVE
+    $cons_busca_chave = "SELECT ch.DS_CHAVE,
+                                ch.TP_STATUS
                          FROM controle_chave.CHAVE ch
                          WHERE ch.CD_CHAVE = $cd_chave";
 
@@ -34,27 +35,37 @@
         // VERIFICA SE NÃO ESTÁ VAZIO O RESULTADO DA CONSULTA DE CHAVE
         if (!empty($row)) {
 
-            // VERIFICA SE TEM ERRO DURANTE A CONSULTA DA CHAVE QUE NÃO É COLETA
-            if (!$valida_nao_coleta) {
+            // VERIFICA O STATUS DA CHAVE
+            if ($row['TP_STATUS'] == 'A') {
 
-                echo $cons_busca_chave_nao_coleta;
-        
-            } else {
-
-                $row_nao_coleta = oci_fetch_array($res_nao_coleta);
-
-                // VERIFICA SE NÃO ESTÁ VAZIO A CONSULTA QUE NÃO É COLETA
-                if (empty($row_nao_coleta)) {
-
-                    echo 'Sucesso';
-
+                // VERIFICA SE TEM ERRO DURANTE A CONSULTA DA CHAVE QUE NÃO É COLETA
+                if (!$valida_nao_coleta) {
+    
+                    echo $cons_busca_chave_nao_coleta;
+            
                 } else {
-
-                    echo 'Chave em uso';
-
+    
+                    $row_nao_coleta = oci_fetch_array($res_nao_coleta);
+    
+                    // VERIFICA SE NÃO ESTÁ VAZIO A CONSULTA QUE NÃO É COLETA
+                    if (empty($row_nao_coleta)) {
+    
+                        echo 'Sucesso';
+    
+                    } else {
+    
+                        echo 'Chave em uso';
+    
+                    }
+    
                 }
 
+            } else {
+
+                echo 'Chave inativa';
+
             }
+
 
        } else {
 

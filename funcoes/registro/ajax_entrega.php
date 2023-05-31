@@ -21,6 +21,8 @@
     var cd_chave = inpt_chave.value;
 
     inpt_chave.addEventListener('change', function() {
+
+        var cracha = document.getElementById('inpt_cracha');
         
         var acao_entrega = document.getElementById('carrega_entrega_chave');
         acao_entrega.innerText = '';
@@ -50,12 +52,12 @@
                     }
         
                     // CHAMAR AJAX ENTREGA
-                    $.get('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria, function(data) {
+                    $.get('funcoes/registro/ajax_entrega_informacoes.php?dschave=' + ds_chave + '&dscategoria=' + ds_categoria + '&cracha=' + cracha.value, function(data) {
         
                         document.getElementById('carrega_entrega_chave').innerHTML = data;
-        
+    
                         // PREENCHE OS SETORES DO MV NO SELECT
-                        $('#selecao_setores').load('funcoes/registro/query_setores.php');
+                        $('#selecao_setores').load('funcoes/registro/query_setores.php?cracha=' + cracha.value);
         
                     });
         
@@ -110,52 +112,66 @@
         var observacao = document.getElementById('inpt_observacao');
         var cracha = document.getElementById('inpt_cracha');
 
-        $.ajax({
-            url: "funcoes/registro/insert_registro_entrega.php",
-            method: "POST",
-            data: {
-                setor: setor.value,
-                ramal: ramal.value,
-                contato: contato.value,
-                observacao: observacao.value,
-                cd_chave: inpt_chave.value,
-                cracha: cracha.value
-            },
-            cache: false,
-            success(res) {
+        if (contato.value == '') {
 
-                if (res == 'Sucesso') {
+            //MENSAGEM            
+            var_ds_msg = 'Necessário%20preenchimento%20dos%20campos.';
+            var_tp_msg = 'alert-danger';
+    
+            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
 
-                    ramal.value = '';
-                    contato.value = '';
-                    observacao.value = '';
+            contato.focus();
 
-                    //MENSAGEM            
-                    var_ds_msg = 'Retirada%20registrado%20com%20sucesso.';
-                    var_tp_msg = 'alert-success';
+        } else {
 
-                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
-
-                    setTimeout(() => {
-                        
-                        window.location.href = "home.php";
-
-                    }, 4000);
-
-                } else {
-
-                    console.log(res)
-
-                    //MENSAGEM            
-                    var_ds_msg = 'Erro%20ao%20registrar%20retirada.';
-                    var_tp_msg = 'alert-danger';
-
-                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
-
+            $.ajax({
+                url: "funcoes/registro/insert_registro_entrega.php",
+                method: "POST",
+                data: {
+                    setor: setor.value,
+                    ramal: ramal.value,
+                    contato: contato.value,
+                    observacao: observacao.value,
+                    cd_chave: inpt_chave.value,
+                    cracha: cracha.value
+                },
+                cache: false,
+                success(res) {
+    
+                    if (res == 'Sucesso') {
+    
+                        ramal.value = '';
+                        contato.value = '';
+                        observacao.value = '';
+    
+                        //MENSAGEM            
+                        var_ds_msg = 'Retirada%20registrado%20com%20sucesso.';
+                        var_tp_msg = 'alert-success';
+    
+                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+    
+                        setTimeout(() => {
+                            
+                            window.location.href = "home.php";
+    
+                        }, 4000);
+    
+                    } else {
+    
+                        console.log(res)
+    
+                        //MENSAGEM            
+                        var_ds_msg = 'Erro%20ao%20registrar%20retirada.';
+                        var_tp_msg = 'alert-danger';
+    
+                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+    
+                    }
+    
                 }
+            })
 
-            }
-        })
+        }
 
     }
 

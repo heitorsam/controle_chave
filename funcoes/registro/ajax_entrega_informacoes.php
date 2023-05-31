@@ -1,7 +1,52 @@
 <?php
 
+    include '../../conexao.php';
+
     $ds_chave = $_GET['dschave'];
     $ds_categoria = $_GET['dscategoria'];
+    $cracha = $_GET['cracha'];
+
+    // PUXA AS ULTIMAS INFORMAÇÕES DE REGISTRO CASO TENHA PARA PREENCHER OS INPUTS AUTOMATICAMENTE
+    $contem_informacao = "SELECT 
+                                CASE
+                                    WHEN COUNT(*) = 0 THEN 'N'
+                                    ELSE 'S'
+                                END AS CONTEM_REGISTRO
+                            FROM (SELECT reg.CD_SETOR_MV,
+                                        uni.NM_SETOR,
+                                        reg.NR_RAMAL,
+                                        reg.NR_CONTATO
+                                FROM controle_chave.REGISTRO reg
+                                INNER JOIN dbamv.SETOR uni
+                                    ON reg.CD_SETOR_MV = uni.CD_SETOR
+                                WHERE reg.CD_REGISTRO IN (SELECT MAX(CD_REGISTRO)
+                                                            FROM controle_chave.REGISTRO reg
+                                                            WHERE reg.CD_USUARIO_MV = '$cracha')) res";
+
+    $res = oci_parse($conn_ora, $contem_informacao);
+    oci_execute($res);
+
+    $row = oci_fetch_array($res);
+
+    if (!empty($row)) {
+
+        $cons_informacoes = "SELECT reg.CD_SETOR_MV,
+                                    uni.NM_SETOR,
+                                    reg.NR_RAMAL,
+                                    reg.NR_CONTATO
+                            FROM controle_chave.REGISTRO reg
+                            INNER JOIN dbamv.SETOR uni
+                                ON reg.CD_SETOR_MV = uni.CD_SETOR
+                            WHERE reg.CD_REGISTRO IN (SELECT MAX(CD_REGISTRO)
+                                                    FROM controle_chave.REGISTRO reg
+                                                    WHERE reg.CD_USUARIO_MV = '$cracha')";
+
+        $res_info = oci_parse($conn_ora, $cons_informacoes);
+        oci_execute($res_info);
+
+        $informacoes = oci_fetch_array($res_info);
+
+    }
 
 ?>
 
@@ -32,12 +77,12 @@
 
     <div class="col-md-2">
         Ramal:
-        <input class="form form-control" type="text" id="inpt_ramal">
+        <input value="<?php if ($row['CONTEM_REGISTRO'] == 'S') { echo $informacoes['NR_RAMAL']; }?>" class="form form-control" type="text" id="inpt_ramal">
     </div>
 
     <div class="col-md-6">
         Contato:
-        <input class="form form-control" type="text" id="inpt_contato">
+        <input value="<?php if ($row['CONTEM_REGISTRO'] == 'S') { echo $informacoes['NR_CONTATO']; }?>" class="form form-control" type="text" id="inpt_contato">
     </div>
 
 </div>

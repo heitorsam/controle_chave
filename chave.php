@@ -44,23 +44,27 @@
 
         <div class="modal-dialog" role="document">
 
-            <div class="modal-content">
+            <div class="modal-content" style="width: 400px; margin: 0 auto;">
 
-            <div class="modal-header">
+                <div class="modal-header">
 
-                <h5 class="modal-title" id="titulo_modal">QR Code</h5>
+                    <h5 class="modal-title" id="titulo_modal">QR Code</h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
-                <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
 
-                </button>
+                    </button>
 
-            </div>
+                </div>
+                
+                <div id="conteudo_modal" class="modal-body" style="padding: 50px 30px 50px 0;">
 
-            <div id="conteudo_modal" class="modal-body">
-                <div style="margin: 0 auto; width: 200px;" id="qrcode"></div>
-            </div>
+                    <button onclick="imprime_code()" class="btn btn-primary" style="float: right;"><i class="fa-solid fa-print"></i></button>
+                    
+                    <div style="margin: 0 auto; width: 200px;" id="qrcode"></div>
+
+                </div>
 
             </div>
 
@@ -161,6 +165,16 @@
         $('#modal_qrcode').modal('show');
 
         gerarQRCode(valor);
+
+    }
+
+    function imprime_code() {
+
+        var conteudo = document.getElementById('qrcode').innerHTML;
+        tela_impressao = window.open('about:blank');
+        tela_impressao.document.write(conteudo);
+        tela_impressao.window.print();
+        tela_impressao.window.close();
 
     }
 

@@ -82,13 +82,12 @@
 
                         <!--MENU-->     
 
-                            <a class="dropdown-item" href="inspecao.php"><i class="fa-solid fa-magnifying-glass"></i> Inspeção</a>
-                            <a class="dropdown-item" href="realizados.php"><i class="fa-regular fa-square-check"></i> Realizados</a>
+                            <a class="dropdown-item" href="registro.php"><i class="fa-solid fa-address-card"></i> Registro</a>
 
                             <?php if($_SESSION['SN_USUARIO_ADM'] == 'S'){ ?>
 
-                                <a class="dropdown-item" href="ficha.php"><i class="fa-regular fa-clipboard"></i> Ficha</a>
-                                <a class="dropdown-item" href="local.php"><i class="fa-solid fa-location-dot"></i> Local</a>
+                                <a class="dropdown-item" href="chave.php"><i class="fa-solid fa-key"></i> Chave</a>
+                                <a class="dropdown-item" href="categoria.php"><i class="fa-solid fa-folder-tree"></i> Categoria</a>
 
                             <?php } ?>
 

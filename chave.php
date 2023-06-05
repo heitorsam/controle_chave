@@ -1,70 +1,82 @@
 <?php
 
     include 'cabecalho.php';
-
     include 'config/mensagem/ajax_mensagem_alert.php';
 
 ?>
 
-    <div id="mensagem_acao"></div>
+<div id="mensagem_acao"></div>
 
-    <h11><i class="fa-solid fa-key"></i> Chave</h11>
-        <div class='espaco_pequeno'></div>
-    <h27><a href="home.php" style="color: #444444; text-decoration: none;"><i class="fa fa-reply efeito-zoom" aria-hidden="true"></i> Voltar</a></h27>
+<h11><i class="fa-solid fa-key"></i> Chave</h11>
+<div class='espaco_pequeno'></div>
+<h27><a href="home.php" style="color: #444444; text-decoration: none;"><i class="fa fa-reply efeito-zoom" aria-hidden="true"></i> Voltar</a></h27>
 
-    <div class="div_br"></div>
+<div class="div_br"></div>
 
-    <div class="row">
-   
-        <div class="col-md-3">
-            Descrição:
-            <input id="descricao" class="form form-control">
-        </div>
+<div class="row">
 
-        <div class="col-md-3">
-            Categoria:
-            <select id="carrega_categorias" class="form form-control" name="" id="">
-                
-            </select>
-        </div>
-
-        <div class="col-md-1 mt-4">
-            <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-        </div>
-
+    <div class="col-md-3">
+        Descrição:
+        <input id="descricao" class="form form-control">
     </div>
 
-    <div class="div_br"></div>
-    <div class="div_br"></div>
+    <div class="col-md-3">
+        Categoria:
+        <select id="carrega_categorias" class="form form-control" name="" id="">
 
-    <div id="carrega_tabela_chave"></div>
+        </select>
+    </div>
 
-    <!-- MODAL QR CODE -->
-    <div class="modal fade" id="modal_qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="col-md-1 mt-4">
+        <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+    </div>
 
-        <div class="modal-dialog" role="document">
+</div>
 
-            <div class="modal-content" style="width: 400px; margin: 0 auto;">
+<div class="div_br"></div>
+<div class="div_br"></div>
 
-                <div class="modal-header">
+<div id="carrega_tabela_chave"></div>
 
-                    <h5 class="modal-title" id="titulo_modal">QR Code</h5>
+<!-- MODAL QR CODE -->
+<div class="modal fade" id="modal_qrcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="modal-dialog modal-dialog-centered" role="document">
 
-                        <span aria-hidden="true">&times;</span>
+        <div class="modal-content" id="modal_content">
 
-                    </button>
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="titulo_modal">QR Code</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+            <div id="conteudo_modal" class="modal-body">
+
+                <button onclick="ajax_imprime_qr()" style="float: right;" class="mt-4 btn btn-primary"><i class="fa-solid fa-print"></i></button>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        
+                        <div>
+                            Tamanho:
+                            <input id="inpt_tamanho_code" onkeyup="alterar_tamanhoQRCode()" type="number" class="form form-control" placeholder="Cm">
+                        </div>
+
+                    </div>
 
                 </div>
-                
-                <div id="conteudo_modal" class="modal-body" style="padding: 50px 30px 50px 0;">
 
-                    <button onclick="imprime_code()" class="btn btn-primary" style="float: right;"><i class="fa-solid fa-print"></i></button>
-                    
-                    <div style="margin: 0 auto; width: 200px;" id="qrcode"></div>
+                <div class="div_br"></div>
+                <div class="div_br"></div>
+                <div class="div_br"></div>
 
-                </div>
+                <div id="qrcode_container" class="text-center"></div>
 
             </div>
 
@@ -72,14 +84,15 @@
 
     </div>
 
+</div>
+
 <?php
 
-    include 'rodape.php';
+include 'rodape.php';
 
 ?>
 
 <script>
-
     window.onload = function() {
 
         $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
@@ -107,7 +120,7 @@
         titulo.focus()
 
         // APÓS TIRAR O FOCO DO ELEMENTO, PROSSEGUE PARA EDIÇÃO
-        titulo.addEventListener('blur', function() {   
+        titulo.addEventListener('blur', function() {
 
             if (ds_chave != titulo.value) {
 
@@ -143,7 +156,7 @@
 
                         }
 
-                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                        $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
                     }
                 })
@@ -168,9 +181,10 @@
 
     }
 
-    function imprime_code() {
 
-        var conteudo = document.getElementById('qrcode').innerHTML;
+    function ajax_imprime_qr() {
+
+        var conteudo = document.getElementById('qrcode_container').innerHTML;
         tela_impressao = window.open('about:blank');
         tela_impressao.document.write(conteudo);
         tela_impressao.window.print();
@@ -191,7 +205,7 @@
             var_ds_msg = 'Campo%20descrição%20não%20pode%20estar%20vazio.';
             var_tp_msg = 'alert-danger';
 
-            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
         } else if (categoria.value == '') {
 
@@ -201,7 +215,7 @@
             var_ds_msg = 'Campo%20categoria%20não%20pode%20estar%20vazio.';
             var_tp_msg = 'alert-danger';
 
-            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
         } else {
 
@@ -235,7 +249,7 @@
 
                     descricao.value = '';
 
-                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
                 }
             })
@@ -244,11 +258,11 @@
 
     }
 
-    function chama_alerta(cd_chave, tp_acao, status_atual=0) {
+    function chama_alerta(cd_chave, tp_acao, status_atual = 0) {
 
         if (tp_acao == 'del') {
 
-            ajax_alert('Deseja excluir chave?', 'exclui_chave('+cd_chave+')');
+            ajax_alert('Deseja excluir chave?', 'exclui_chave(' + cd_chave + ')');
 
         } else if (tp_acao == 'stt') {
 
@@ -260,7 +274,7 @@
 
             }
 
-            ajax_alert(mensagem, 'alterar_status_chave('+cd_chave+',\''+status_atual+'\')'); 
+            ajax_alert(mensagem, 'alterar_status_chave(' + cd_chave + ',\'' + status_atual + '\')');
 
         }
 
@@ -308,7 +322,7 @@
 
                 }
 
-                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
             }
 
@@ -345,7 +359,7 @@
 
                 }
 
-                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
             }
         })
@@ -354,8 +368,10 @@
 
     function gerarQRCode(valor) {
 
+        localStorage.setItem("code", valor);
+
         // PEGA O ESPAÇO DE RENDERIZAR O QR CODE
-        var espaco_qrcode = document.getElementById("qrcode");
+        var espaco_qrcode = document.getElementById("qrcode_container");
 
         // LIMPA O ESPAÇO CASO JÁ EXISTA PARA RENDERIZAR UM NOVO
         espaco_qrcode.innerHTML = '';
@@ -364,11 +380,71 @@
         var qrcode = new QRCode(espaco_qrcode, {
 
             text: `${valor}`,
-            width: 210,
-            height: 210
+            width: 112,
+            height: 112
 
         });
 
+        var novo_tamanho = 5 * 37.80;
+        var proporcao = novo_tamanho / 400;
+
+        var modal_dialog = document.querySelector('.modal-dialog');
+        var qrcode_container = document.getElementById("qrcode_container");
+
+        // AJUSTA O TAMANHO DA MODAL PROPORCIONALMENTE
+        modal_dialog.style.width = (400 * proporcao) + 'px';
+        modal_dialog.style.maxWidth = (850 * proporcao) + 'px';
+
+        // AJUSTA O TAMANHO DO QR CODE PARA CENTRALIZAR
+        qrcode_container.style.width = novo_tamanho + 'px';
+        qrcode_container.style.height = novo_tamanho + 'px';
+        qrcode_container.style.margin = '0 auto';
+
     }
+
+    function alterar_tamanhoQRCode() {
+
+        var codigo_qr = localStorage.getItem("code");
+        var tamanho_cm = document.getElementById('inpt_tamanho_code').value;
+
+        var tamanho_inicial = 400;
+
+        if (tamanho_cm == '' || tamanho_cm <= 0) {
+
+            tamanho_cm = 3;
+
+        } else if (tamanho_cm >= 15) {
+
+            tamanho_cm = 15;
+
+        }
+
+        var novo_tamanho = tamanho_cm * 37.80;
+        var proporcao = novo_tamanho / tamanho_inicial;
+
+        var modal_dialog = document.querySelector('.modal-dialog');
+        var qrcode_container = document.getElementById("qrcode_container");
+
+        // AJUSTA O TAMANHO DA MODAL PROPORCIONALMENTE
+        modal_dialog.style.width = (tamanho_inicial * proporcao) + 'px';
+        modal_dialog.style.maxWidth = (850 * proporcao) + 'px';
+
+        // AJUSTA O TAMANHO DO QR CODE PARA CENTRALIZAR
+        qrcode_container.style.width = novo_tamanho + 'px';
+        qrcode_container.style.height = novo_tamanho + 'px';
+        qrcode_container.style.margin = '0 auto';
+
+        // RENDERIZA O QR CODE
+        qrcode_container.innerHTML = '';
+
+        var qrcode = new QRCode(qrcode_container, {
+            text: `${codigo_qr}`,
+            width: novo_tamanho,
+            height: novo_tamanho
+        });
+
+    }
+
+
 
 </script>

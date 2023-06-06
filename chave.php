@@ -1,6 +1,7 @@
 <?php
 
     include 'cabecalho.php';
+    include 'acesso_restrito_adm.php';
     include 'config/mensagem/ajax_mensagem_alert.php';
 
 ?>
@@ -122,13 +123,13 @@ include 'rodape.php';
         // APÓS TIRAR O FOCO DO ELEMENTO, PROSSEGUE PARA EDIÇÃO
         titulo.addEventListener('blur', function() {
 
-            if (ds_chave != titulo.value) {
+            if (ds_chave != titulo.value && titulo.value.trim() != '') {
 
                 $.ajax({
                     url: "funcoes/chave/update_chave.php",
                     method: "POST",
                     data: {
-                        nova_ds_chave: titulo.value,
+                        nova_ds_chave: titulo.value.trim(),
                         cd_chave: cd_chave
                     },
                     cache: false,
@@ -180,7 +181,6 @@ include 'rodape.php';
         gerarQRCode(valor);
 
     }
-
 
     function ajax_imprime_qr() {
 

@@ -29,7 +29,8 @@
                                     ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
                                     ) res                                
                                 LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE";
+                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE
+                                ORDER BY res.CD_CHAVE";
 
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 
@@ -68,17 +69,21 @@
                     echo '<td class="align-middle">'. $row['DS_CATEGORIA'] .'</td>';
                     echo '<td class="align-middle">';
 
-                        if ($row['TP_STATUS'] == 'A') {
+                        if ($row['TP_STATUS'] == 'A' && $row['RESPONSAVEL'] == 'SEM RESPONSÁVEL') {
 
                             $tp_acao = 'stt';
 
                             echo '<i style="cursor: pointer; font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
 
-                        } else {
+                        } else if ($row['TP_STATUS'] != 'A'  && $row['RESPONSAVEL'] == 'SEM RESPONSÁVEL') {
 
                             $tp_acao = 'stt';
 
                             echo '<i style="cursor: pointer; font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
+
+                        } else {
+
+                            echo '<i style="font-size: 25px; color: #585858;" class="fa-solid fa-toggle-on"></i>';
 
                         }
                         

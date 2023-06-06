@@ -65,6 +65,10 @@
 
         echo '<option value="'. $resp_setor_cracha['CD_SETOR_MV'] .'">'. $resp_setor_cracha['NM_SETOR'] .'</option>';
 
+    } else {
+
+        echo '<option id="selecione" value="all" disabled selected>Selecione...</option>';
+
     }
 
     // EXECUTA CONSULTA SETORES
@@ -86,3 +90,16 @@
     }
 
 ?>
+
+<script>
+
+    var selecione = document.getElementById('selecione');
+    var selecao_setores = document.getElementById('carrega_categorias');
+
+    selecao_setores.addEventListener('change', function() {
+
+        selecione.parentNode.removeChild(selecione);
+
+    })    
+
+</script>

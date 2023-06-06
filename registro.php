@@ -1,6 +1,7 @@
 <?php
 
     include 'cabecalho.php';
+    include 'acesso_restrito.php';
 
 ?>
 

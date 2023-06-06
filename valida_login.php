@@ -32,6 +32,7 @@
 														WHEN :usuario IN (SELECT DISTINCT puia.CD_USUARIO
 																			FROM dbasgu.PAPEL_USUARIOS puia
 																			WHERE puia.CD_PAPEL = 461) THEN 'S' --PAPEL ADM
+														ELSE 'N'
 													END SN_USUARIO_ADM
 
 												FROM DUAL");																														

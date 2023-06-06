@@ -29,7 +29,7 @@
     <?php if($_SESSION['SN_USUARIO_ADM'] == 'S'){ ?>
 
         <h11 style="margin-left: 10px;">Administrador</h11>
-        <div class="div_br"> </div>
+        <div class="div_br"></div>
 
         <a href="chave.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>
         <span class="espaco_pequeno"></span>

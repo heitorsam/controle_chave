@@ -1,6 +1,7 @@
 <?php
 
     include 'cabecalho.php';
+    include 'acesso_restrito_adm.php';
 
 ?>
     <div id="mensagem_acao"></div>
@@ -158,6 +159,8 @@
 
     function editar_categoria(cd_categoria, ds_categoria) {
 
+        //var caracteres_especiais = ['!', '@', '#', '$', '¨', '&', '*', '(', ')', '.', ',', '{', '}', '[', ']', '|', '"', '\'', '-', '+'];
+
         // PEGA O TD PELO ID
         td_categoria = document.getElementById(cd_categoria);
 
@@ -176,15 +179,15 @@
         titulo.focus()
 
         // APÓS TIRAR O FOCO DO ELEMENTO, PROSSEGUE PARA EDIÇÃO
-        titulo.addEventListener('blur', function() {   
+        titulo.addEventListener('blur', function() {
 
-            if (ds_categoria != titulo.value) {
+            if (ds_categoria != titulo.value && titulo.value.trim() != '') {
 
                 $.ajax({
                     url: "funcoes/categoria/update_categoria.php",
                     method: "POST",
                     data: {
-                        nova_ds_categoria: titulo.value,
+                        nova_ds_categoria: titulo.value.trim(),
                         cd_categoria: cd_categoria
                     },
                     cache: false,

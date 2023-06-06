@@ -149,12 +149,12 @@
                         var_tp_msg = 'alert-success';
     
                         $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
-    
+
                         setTimeout(() => {
-                            
-                            window.location.href = "home.php";
-    
-                        }, 4000);
+
+                            window.location.href = "registro.php";
+
+                        }, 3000)
     
                     } else {
     

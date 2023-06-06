@@ -18,7 +18,7 @@
         include 'js/mensagens_usuario.php';
     ?>
 
-    <h11 style="margin-left: 10px;">Home</h11>
+    <h11 style="margin-left: 10px;"><i class="fa-solid fa-house"></i> Home</h11>
     <div class="div_br"> </div>    
 
     <a href="registro.php" class="botao_home" type="submit"><i class="fa-solid fa-address-card"></i> Registro</a></td></tr>
@@ -28,7 +28,7 @@
 
     <?php if($_SESSION['SN_USUARIO_ADM'] == 'S'){ ?>
 
-        <h11 style="margin-left: 10px;">Administrador</h11>
+        <h11 style="margin-left: 10px;"><i class="fa-solid fa-user-gear"></i> Administrador</h11>
         <div class="div_br"></div>
 
         <a href="chave.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>

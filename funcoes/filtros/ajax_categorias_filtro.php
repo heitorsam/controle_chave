@@ -5,13 +5,12 @@
     $cons_categorias = "SELECT cat.CD_CATEGORIA,
                                cat.DS_CATEGORIA
                         FROM controle_chave.CATEGORIA cat
-                        WHERE cat.TP_STATUS = 'A'
                         ORDER BY cat.DS_CATEGORIA DESC";
 
     $res = oci_parse($conn_ora, $cons_categorias);
     oci_execute($res);
 
-    echo '<option id="selecione" value="all" disabled selected>Selecione...</option>';
+    echo '<option id="todos" value="all" selected>Todas</option>';
 
     while($row = oci_fetch_array($res)) {
 
@@ -20,16 +19,3 @@
     }
 
 ?>
-
-<script>
-
-    var selecione = document.getElementById('selecione');
-    var carrega_categorias = document.getElementById('carrega_categorias');
-
-    carrega_categorias.addEventListener('change', function() {
-
-        selecione.parentNode.removeChild(selecione);
-
-    })    
-
-</script>

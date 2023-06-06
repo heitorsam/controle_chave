@@ -23,13 +23,31 @@
 
     <div class="col-md-3">
         Categoria:
-        <select id="carrega_categorias" class="form form-control" name="" id="">
+        <select id="carrega_categorias" class="form form-control">
 
         </select>
     </div>
 
     <div class="col-md-1 mt-4">
         <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+    </div>    
+
+    <div class="mt-4">
+        <i onclick="toggle_filtro()" style="font-size: 28px; cursor: pointer;" class="fa-solid fa-filter"></i>
+    </div>
+
+</div>
+
+<div class="div_br"></div>
+
+<div class="row" id="filtros" style="display: none;">
+
+    <div class="col-md-3">
+
+        <select onchange="aplicar_filtro()" id="categorias_filtro" class="form form-control">
+
+        </select>
+
     </div>
 
 </div>
@@ -66,7 +84,7 @@
                         
                         <div>
                             Tamanho:
-                            <input id="inpt_tamanho_code" onkeyup="alterar_tamanhoQRCode()" type="number" class="form form-control" placeholder="Cm">
+                            <input id="inpt_tamanho_code" onkeyup="alterar_tamanhoQRCode()" type="number" class="form form-control" placeholder="3 cm">
                         </div>
 
                     </div>
@@ -94,10 +112,43 @@ include 'rodape.php';
 ?>
 
 <script>
+
+    // VARIAVEL DE FILTRO PARA CONTROLAR MOSTRAGEM DE FILTROS NA TABELA CHAVE
+    var toggle_categoria = false;
+
     window.onload = function() {
 
-        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
         $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
+
+    }
+
+    function toggle_filtro() {
+
+        var filtros = document.getElementById('filtros');
+
+        // INVERTE O VALOR DA VARIAVEL DE FILTRO
+        toggle_categoria = !toggle_categoria;
+
+        if (toggle_categoria) {
+
+            filtros.style.display = 'block';
+
+            $('#categorias_filtro').load('funcoes/filtros/ajax_categorias_filtro.php');
+
+        } else {
+
+            filtros.style.display = 'none';
+
+        }
+
+    }
+
+    function aplicar_filtro() {
+
+        var cd_categoria = document.getElementById('categorias_filtro').value;
+
+        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + cd_categoria);
 
     }
 
@@ -137,7 +188,7 @@ include 'rodape.php';
 
                         if (res == 'Sucesso') {
 
-                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
 
                             //MENSAGEM            
                             var_ds_msg = 'Chave%20alterada%20com%20sucesso.';
@@ -231,7 +282,7 @@ include 'rodape.php';
 
                     if (res == 'Sucesso') {
 
-                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
 
                         //MENSAGEM            
                         var_ds_msg = 'Chave%20cadastrada%20com%20sucesso.';
@@ -306,7 +357,7 @@ include 'rodape.php';
 
                 if (res == 'Sucesso') {
 
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
 
                     //MENSAGEM            
                     var_ds_msg = 'Status%20alterado%20com%20sucesso.';
@@ -343,7 +394,7 @@ include 'rodape.php';
 
                 if (res === 'Sucesso') {
 
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php');
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
 
                     //MENSAGEM            
                     var_ds_msg = 'Chave%20excluída%20com%20sucesso.';

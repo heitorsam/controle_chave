@@ -4,8 +4,11 @@
 
     include '../../config/mensagem/ajax_mensagem_alert.php';
 
+    $cd_categoria = $_GET['cdcategoria'];
+
     $cons_tabela_chave = "   SELECT res.CD_CHAVE,
                                     res.DS_CHAVE,
+                                    res.CD_CATEGORIA,
                                     res.DS_CATEGORIA,
                                     res.TP_STATUS,
                                     res.QTD_REGISTROS,
@@ -15,6 +18,7 @@
                                     END AS RESPONSAVEL
                                 FROM (SELECT ch.CD_CHAVE,
                                         ch.DS_CHAVE,
+                                        cat.CD_CATEGORIA,
                                         cat.DS_CATEGORIA,
                                         ch.TP_STATUS,
                                         (SELECT COUNT(reg.CD_REGISTRO)
@@ -29,8 +33,19 @@
                                     ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
                                     ) res                                
                                 LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE
-                                ORDER BY res.CD_CHAVE";
+                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE";
+    
+    // APLICA OS FILTROS CASO EXISTA ALGUM, SE FOR ENVIADO COMO ALL, MOSTRA TODOS
+    if ($cd_categoria == 'all') {
+
+        $cons_tabela_chave .= " ORDER BY res.CD_CHAVE DESC";
+
+    } else {
+
+        $cons_tabela_chave .= " WHERE res.CD_CATEGORIA = '$cd_categoria'
+                                ORDER BY res.CD_CHAVE DESC";
+
+    }
 
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 
@@ -83,7 +98,7 @@
 
                         } else {
 
-                            echo '<i style="font-size: 25px; color: #585858;" class="fa-solid fa-toggle-on"></i>';
+                            echo '<i style="font-size: 25px; color: #A4A4A4;" class="fa-solid fa-toggle-on"></i>';
 
                         }
                         

@@ -91,11 +91,17 @@
                                 var_ds_msg = 'Devolução%20realizada%20com%20sucesso.';
                                 var_tp_msg = 'alert-success';
 
-                                setTimeout(() => {
-                                    
-                                    window.location.href = 'home.php';
+                                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                                
+                                cd_chave.value = '';
+                                cracha = '';
+                                observacao.value = '';
 
-                                }, 4000);
+                                setTimeout(() => {
+
+                                    window.location.href = "registro.php";
+
+                                }, 3000)
 
                             } else {
 
@@ -103,9 +109,11 @@
                                 var_ds_msg = 'Erro%20ao%20realizar%20devolução.';
                                 var_tp_msg = 'alert-danger';
 
+                                $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+
                             }
 
-                            $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg='+var_ds_msg+'&tp_msg='+var_tp_msg);
+                            
 
                         }
 

@@ -27,7 +27,7 @@
 
     if (!$valida) {
 
-        echo $query_insert_categoria;
+        echo $query_insert_chave;
 
     } else {
 

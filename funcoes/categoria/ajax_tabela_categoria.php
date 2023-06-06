@@ -10,7 +10,8 @@
                                (SELECT COUNT(CD_CATEGORIA) AS QNTD_CHAVES
                                FROM controle_chave.CHAVE ch
                                WHERE ch.CD_CATEGORIA = cat.CD_CATEGORIA) AS QNTD_CHAVES
-                        FROM controle_chave.CATEGORIA cat";
+                        FROM controle_chave.CATEGORIA cat
+                        ORDER BY cat.CD_CATEGORIA DESC";
     
     $res_cons_tabela_categoria = oci_parse($conn_ora, $cons_categorias);
 

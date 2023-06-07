@@ -39,7 +39,27 @@
 
     <?php } ?>
 
+    <div class="div_br"></div>
+
+    <h11 style="margin-left: 10px;"><i class="fa-solid fa-chart-column efeito-zoom"></i> Dashboard</h11>
+
+    <div class="div_br"> </div>
+    
+    <div id="carrega_dashboard"></div>
+
+    
+
 <?php
     //RODAPE
     include 'rodape.php';
 ?>
+
+<script>
+
+    window.onload = function() {
+
+        $('#carrega_dashboard').load('funcoes/dashboard/dashboard.php');
+
+    }
+
+</script>

@@ -28,7 +28,7 @@
                 </div>
             	<div class="col-md-10">
                     <ul class="list">
-                        <li><a href="sair.php">Sair</a></li>
+                        <li><a onclick="remover_sessoes_rodape()" href="sair.php">Sair</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,8 +64,16 @@
 
 <script>
 
- if(navigator.userAgent.match(/Android/i)){
-    window.scrollTo(0,1);
- }
+    if(navigator.userAgent.match(/Android/i)){
+        window.scrollTo(0,1);
+    }
+
+    function remover_sessoes_rodape() {
+
+        sessionStorage.removeItem("categoria");
+
+        window.location.href = "sair.php";
+
+    }
 
 </script>

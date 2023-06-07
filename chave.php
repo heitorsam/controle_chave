@@ -111,14 +111,25 @@ include 'rodape.php';
 
 ?>
 
-<script>
+<script> 
 
     // VARIAVEL DE FILTRO PARA CONTROLAR MOSTRAGEM DE FILTROS NA TABELA CHAVE
     var toggle_categoria = false;
-
+    
+    //CARREGA PAGINA
     window.onload = function() {
 
-        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+        if (sessionStorage.getItem("categoria") == null) {
+
+            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+
+        } else {
+
+            var valorRecuperado = sessionStorage.getItem("categoria");
+            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+
+        }
+ 
         $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
 
     }
@@ -134,7 +145,16 @@ include 'rodape.php';
 
             filtros.style.display = 'block';
 
-            $('#categorias_filtro').load('funcoes/filtros/ajax_categorias_filtro.php');
+            if (sessionStorage.getItem("categoria") == null) {
+
+                $('#categorias_filtro').load('funcoes/filtros/ajax_categorias_filtro.php?cdcategoria=all');
+
+            } else {
+
+                var cd_categoria = sessionStorage.getItem("categoria");
+                $('#categorias_filtro').load('funcoes/filtros/ajax_categorias_filtro.php?cdcategoria=' + cd_categoria);
+
+            }
 
         } else {
 
@@ -146,9 +166,14 @@ include 'rodape.php';
 
     function aplicar_filtro() {
 
-        var cd_categoria = document.getElementById('categorias_filtro').value;
+        categoria = document.getElementById('categorias_filtro').value;
 
-        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + cd_categoria);
+        var valor = categoria;
+        sessionStorage.setItem("categoria", valor);
+
+        var valorRecuperado = sessionStorage.getItem("categoria");
+
+        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
     }
 
@@ -188,7 +213,7 @@ include 'rodape.php';
 
                         if (res == 'Sucesso') {
 
-                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
                             //MENSAGEM            
                             var_ds_msg = 'Chave%20alterada%20com%20sucesso.';
@@ -282,7 +307,7 @@ include 'rodape.php';
 
                     if (res == 'Sucesso') {
 
-                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
                         //MENSAGEM            
                         var_ds_msg = 'Chave%20cadastrada%20com%20sucesso.';
@@ -357,7 +382,7 @@ include 'rodape.php';
 
                 if (res == 'Sucesso') {
 
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
                     //MENSAGEM            
                     var_ds_msg = 'Status%20alterado%20com%20sucesso.';
@@ -394,7 +419,7 @@ include 'rodape.php';
 
                 if (res === 'Sucesso') {
 
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
                     //MENSAGEM            
                     var_ds_msg = 'Chave%20excluída%20com%20sucesso.';

@@ -106,7 +106,7 @@
                     echo '</td>';
                     echo '<td class="align-middle">'. $row['RESPONSAVEL'] .'</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
-                    echo '<td onclick="modal_qrcode('. $row['CD_CHAVE'] .')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
+                    echo '<td onclick="modal_qrcode(' . $row['CD_CHAVE'] . ',\'' . $row['DS_CHAVE'] . '\',\'' . $row['DS_CATEGORIA'] . '\')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 
                     echo '<td class="align-middle">';
 

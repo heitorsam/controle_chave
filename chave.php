@@ -84,7 +84,7 @@
                         
                         <div>
                             Tamanho:
-                            <input id="inpt_tamanho_code" onkeyup="alterar_tamanhoQRCode()" type="number" class="form form-control" placeholder="3 cm">
+                            <input id="inpt_tamanho_code" onkeyup="alterar_tamanhoQRCode()" type="number" class="form form-control" placeholder="1.7 cm">
                         </div>
 
                     </div>
@@ -250,23 +250,41 @@ include 'rodape.php';
 
     }
 
-    function modal_qrcode(valor) {
+    function modal_qrcode(valor, ds_chave, ds_categoria) {
 
         $('#modal_qrcode').modal('show');
 
-        gerarQRCode(valor);
+        gerarQRCode(valor, ds_chave, ds_categoria);
 
     }
 
     function ajax_imprime_qr() {
 
-        var conteudo = document.getElementById('qrcode_container').innerHTML;
-        tela_impressao = window.open('about:blank');
-        tela_impressao.document.write(conteudo);
+        var container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.flexDirection = 'row';
+
+        var qrcodeContainer = document.getElementById('qrcode_container');
+        var qrcode = qrcodeContainer.querySelector('espaco_qrcode');
+        var descricao = qrcodeContainer.querySelector('container_labels');
+
+        var qrCodeContainerClone = qrcodeContainer.cloneNode(true);
+
+        qrCodeContainerClone.style.position = 'absolute';
+        qrCodeContainerClone.style.top = '0px';
+        qrCodeContainerClone.style.left = '0px';
+
+        container.appendChild(qrCodeContainerClone);
+  
+
+        var tela_impressao = window.open('about:blank');
+        tela_impressao.document.write(container.outerHTML);
         tela_impressao.window.print();
         tela_impressao.window.close();
 
     }
+
+
 
     function cadastra_chave() {
 
@@ -294,7 +312,7 @@ include 'rodape.php';
             $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
         } else {
-            
+
 
             $.ajax({
                 url: "funcoes/chave/insert_chave.php",
@@ -449,7 +467,7 @@ include 'rodape.php';
 
     }
 
-    function gerarQRCode(valor) {
+    function gerarQRCode(valor, ds_chave, ds_categoria) {
 
         localStorage.setItem("code", valor);
 
@@ -459,15 +477,48 @@ include 'rodape.php';
         // LIMPA O ESPAÇO CASO JÁ EXISTA PARA RENDERIZAR UM NOVO
         espaco_qrcode.innerHTML = '';
 
-        // MONTA O QR CODE
-        var qrcode = new QRCode(espaco_qrcode, {
+        // CRIANDO OS TEXTOS DE CATEGORIA E CHAVE
+        var container_qrcode = document.createElement('div');
+        var valor_texto = document.createElement('p');
+        var qrcode = document.createElement('div');
+        var container_labels = document.createElement('div');
+        var ds_chave_elemento = document.createElement('p');
+        //var ds_categoria_elemento = document.createElement('p');
 
+        ds_chave_elemento.innerText = ds_chave;
+        //ds_categoria_elemento.innerText = ds_categoria;
+        valor_texto.innerText = '(' + valor + ')';
+        valor_texto.style.fontSize = '9px';
+
+        container_qrcode.appendChild(qrcode);
+        container_qrcode.appendChild(valor_texto);
+        container_labels.appendChild(ds_chave_elemento);
+
+        container_qrcode.className = 'container_qrcode';
+        container_labels.className = 'container_labels';
+        
+        //container_labels.appendChild(ds_categoria_elemento);
+
+        ds_chave_elemento.style.fontSize = '9px';
+        //ds_categoria_elemento.style.fontSize = '9px';
+        container_labels.style.marginLeft = '1.5px';
+
+        espaco_qrcode.style.display = 'flex';
+        espaco_qrcode.style.flexDirection = 'row';
+
+        espaco_qrcode.appendChild(container_qrcode);
+        espaco_qrcode.appendChild(container_labels);
+
+        // MONTA O QR CODE
+        var qrcode = new QRCode(qrcode, {
+            //64.26
             text: `${valor}`,
-            width: 112,
-            height: 112
+            width: 55.26,
+            height: 55.26
 
         });
 
+        // GERANDO TAMANHO PADRÃO (INICIAL)
         var novo_tamanho = 5 * 37.80;
         var proporcao = novo_tamanho / 400;
 
@@ -494,7 +545,7 @@ include 'rodape.php';
 
         if (tamanho_cm == '' || tamanho_cm <= 0) {
 
-            tamanho_cm = 3;
+            tamanho_cm = 1.7;
 
         } else if (tamanho_cm >= 15) {
 

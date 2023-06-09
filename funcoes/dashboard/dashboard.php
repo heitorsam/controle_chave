@@ -2,40 +2,37 @@
 
 include '../../conexao.php';
 
-$cons_armazenamento_mensal = "SELECT EXTRACT(YEAR FROM reg.HR_CADASTRO) AS ANO,
-                                         EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
-                                         COUNT(reg.CD_REGISTRO) AS QTD
-                                  FROM controle_chave.REGISTRO reg
-                                  WHERE EXTRACT(YEAR FROM reg.HR_CADASTRO) = 2023
-                                  GROUP BY EXTRACT(YEAR FROM reg.HR_CADASTRO), EXTRACT(MONTH FROM reg.HR_CADASTRO)
-                                  ORDER BY EXTRACT(MONTH FROM reg.HR_CADASTRO) ASC";
+$periodo = $_GET['filtro'];
 
-$cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
+if ($periodo == 'hoje') {
+
+    $cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
+                                            EXTRACT(DAY FROM reg.HR_CADASTRO) AS DIA,
+                                            COUNT(reg.CD_REGISTRO) AS QTD
+                                    FROM controle_chave.REGISTRO reg
+                                    WHERE TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')       
+                                    GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)";
+} else {
+
+    $cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
                                          EXTRACT(DAY FROM reg.HR_CADASTRO) AS DIA,
                                          COUNT(reg.CD_REGISTRO) AS QTD
                                   FROM controle_chave.REGISTRO reg
-                                  WHERE TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') = '2023-06'       
+                                  WHERE TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') = '$periodo'
                                   GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)";
 
+}
+
+$cons_armazenamento_mensal = "SELECT EXTRACT(YEAR FROM reg.HR_CADASTRO) AS ANO,
+                                     EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
+                                     COUNT(reg.CD_REGISTRO) AS QTD
+                              FROM controle_chave.REGISTRO reg
+                              WHERE EXTRACT(YEAR FROM reg.HR_CADASTRO) = TO_CHAR(SYSDATE, 'YYYY')
+                              GROUP BY EXTRACT(YEAR FROM reg.HR_CADASTRO), EXTRACT(MONTH FROM reg.HR_CADASTRO)
+                              ORDER BY EXTRACT(MONTH FROM reg.HR_CADASTRO) ASC";
+
+
 ?>
-
-<div class="row">
-
-    <div class="col-sm-3">
-
-        <input id="inpt_mes" onchange="filtrar_mes()" class="form form-control" type="month">
-
-    </div>
-
-</div>
-
-<div class="div_br"></div>
-
-<h11 style="margin-left: 10px;"><i class="fa-regular fa-calendar-days"></i> Armazenados por mês</h11>
-
-<div class="div_br"></div>
-
-<canvas id="armazenamento_mensal" style="width: 100%; height: 300px;"></canvas>
 
 <div class="div_br"></div>
 
@@ -44,6 +41,14 @@ $cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
 <div class="div_br"></div>
 
 <canvas id="armazenamento_diario" style="width: 100%; height: 300px;"></canvas>
+
+<h11 style="margin-left: 10px;"><i class="fa-regular fa-calendar-days"></i> Armazenados por mês</h11>
+
+<div class="div_br"></div>
+
+<canvas id="armazenamento_mensal" style="width: 100%; height: 300px;"></canvas>
+
+<div class="div_br"></div>
 
 
 <script>
@@ -153,12 +158,4 @@ $cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
             }
         },
     });
-
-
-
-    function filtrar_mes() {
-
-        var mes = document.getElementById('inpt_mes');
-
-    }
 </script>

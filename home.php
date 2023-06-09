@@ -44,6 +44,16 @@
     <h11 style="margin-left: 10px;"><i class="fa-solid fa-chart-column efeito-zoom"></i> Dashboard</h11>
 
     <div class="div_br"> </div>
+
+    <div class="row">
+
+        <div class="col-sm-3">
+
+            <input id="inpt_mes" onchange="filtrar_mes()" class="form form-control" type="month">
+
+        </div>
+
+    </div>
     
     <div id="carrega_dashboard"></div>
 
@@ -58,7 +68,15 @@
 
     window.onload = function() {
 
-        $('#carrega_dashboard').load('funcoes/dashboard/dashboard.php');
+        $('#carrega_dashboard').load('funcoes/dashboard/dashboard.php?filtro=hoje');
+
+    }
+
+    function filtrar_mes() {
+
+        var mes = document.getElementById('inpt_mes').value;
+
+        $('#carrega_dashboard').load('funcoes/dashboard/dashboard.php?filtro=' + mes);
 
     }
 

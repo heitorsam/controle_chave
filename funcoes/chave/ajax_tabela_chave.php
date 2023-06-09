@@ -33,10 +33,11 @@
                                     ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
                                     ) res                                
                                 LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE";
+                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE
+                                ORDER BY res.CD_CHAVE DESC";
     
     // APLICA OS FILTROS CASO EXISTA ALGUM, SE FOR ENVIADO COMO ALL, MOSTRA TODOS
-    if ($cd_categoria == 'all') {
+/*     if ($cd_categoria == 'all') {
 
         $cons_tabela_chave .= " ORDER BY res.CD_CHAVE DESC";
 
@@ -46,7 +47,7 @@
                                 ORDER BY res.CD_CHAVE DESC";
 
     }
-
+ */
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 
     oci_execute($res);

@@ -305,10 +305,12 @@ include 'rodape.php';
                 cache: false,
                 success(res) {
 
+                    valorRecuperado = sessionStorage.getItem("categoria");
+
                     if (res == 'Sucesso') {
 
                         $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
-
+                        alert('ok')
                         //MENSAGEM            
                         var_ds_msg = 'Chave%20cadastrada%20com%20sucesso.';
                         var_tp_msg = 'alert-success';
@@ -382,6 +384,8 @@ include 'rodape.php';
 
                 if (res == 'Sucesso') {
 
+                    valorRecuperado = sessionStorage.getItem("categoria");
+
                     $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
 
                     //MENSAGEM            
@@ -416,6 +420,8 @@ include 'rodape.php';
             },
             cache: false,
             success(res) {
+
+                valorRecuperado = sessionStorage.getItem("categoria");
 
                 if (res === 'Sucesso') {
 

@@ -16,7 +16,7 @@
                             $cd_categoria AS CD_CATEGORIA,
                             'A' AS TP_STATUS,
                             '$cd_usuario_logado' AS CD_USUARIO_CADASTRO,
-                            TO_CHAR(SYSDATE, 'DD/MM/YYY HH24:MI:SS') AS HR_CADASTRO,
+                            SYSDATE AS HR_CADASTRO,
                             NULL AS CD_USUARIO_ULT_ALT,
                             NULL AS HR_ULT_ALT
                             FROM dual";

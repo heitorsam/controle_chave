@@ -294,6 +294,7 @@ include 'rodape.php';
             $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
         } else {
+            
 
             $.ajax({
                 url: "funcoes/chave/insert_chave.php",

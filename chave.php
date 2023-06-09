@@ -271,7 +271,7 @@ include 'rodape.php';
     function cadastra_chave() {
 
         var descricao = document.getElementById('descricao');
-        var categoria = document.getElementById('carrega_categorias');
+        var categoria_insert = document.getElementById('carrega_categorias');
 
         if (descricao.value == '') {
 
@@ -283,9 +283,9 @@ include 'rodape.php';
 
             $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
 
-        } else if (categoria.value == '') {
+        } else if (categoria_insert.value == '') {
 
-            categoria.focus();
+            categoria_insert.focus();
 
             //MENSAGEM            
             var_ds_msg = 'Campo%20categoria%20não%20pode%20estar%20vazio.';
@@ -300,7 +300,7 @@ include 'rodape.php';
                 method: "POST",
                 data: {
                     descricao: descricao.value,
-                    cd_categoria: categoria.value
+                    cd_categoria: categoria_insert.value
                 },
                 cache: false,
                 success(res) {

@@ -6,48 +6,64 @@
 
     $cd_categoria = $_GET['cdcategoria'];
 
-    $cons_tabela_chave = "   SELECT res.CD_CHAVE,
-                                    res.DS_CHAVE,
-                                    res.CD_CATEGORIA,
-                                    res.DS_CATEGORIA,
-                                    res.TP_STATUS,
-                                    res.QTD_REGISTROS,
+    $cons_tabela_chave = "   SELECT tot.CD_CHAVE,
+                                    tot.DS_CHAVE,
+                                    tot.DS_CATEGORIA,
+                                    tot.TP_STATUS,
+                                    tot.QTD_REGISTROS,
+                                    tot.RESPONSAVEL,
                                     CASE
-                                        WHEN res.RESPONSAVEL_CHAVE IS NULL THEN 'SEM RESPONSÁVEL'
-                                        ELSE vfc.NM_RESUMIDO
-                                    END AS RESPONSAVEL
+                                        WHEN tot.RESPONSAVEL = 'SEM RESPONSÁVEL' THEN ''
+                                        ELSE TO_CHAR((SELECT reg.HR_CADASTRO
+                                                    FROM controle_chave.REGISTRO reg
+                                                    WHERE reg.CD_REGISTRO = tot.CD_REGISTRO), 'DD/MM/YYYY HH24:MI')
+                                    END AS RETIRADA
+                                FROM (
+                                SELECT res.CD_CHAVE,
+                                        res.DS_CHAVE,
+                                        res.CD_CATEGORIA,
+                                        res.DS_CATEGORIA,
+                                        res.TP_STATUS,
+                                        res.QTD_REGISTROS,
+                                        res.CD_REGISTRO,
+                                        CASE
+                                            WHEN res.RESPONSAVEL_CHAVE IS NULL THEN 'SEM RESPONSÁVEL'
+                                            ELSE vfc.NM_RESUMIDO
+                                        END AS RESPONSAVEL
                                 FROM (SELECT ch.CD_CHAVE,
-                                        ch.DS_CHAVE,
-                                        cat.CD_CATEGORIA,
-                                        cat.DS_CATEGORIA,
-                                        ch.TP_STATUS,
-                                        (SELECT COUNT(reg.CD_REGISTRO)
-                                        FROM controle_chave.REGISTRO reg
-                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
-                                        (SELECT reg.CD_USUARIO_MV                 
-                                        FROM controle_chave.REGISTRO reg
-                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE
-                                            AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
-                                FROM controle_chave.CHAVE ch
-                                INNER JOIN controle_chave.CATEGORIA cat
-                                    ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
-                                    ) res                                
-                                LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                    ON vfc.CRACHA = res.RESPONSAVEL_CHAVE
-                                ORDER BY res.CD_CHAVE DESC";
+                                            ch.DS_CHAVE,
+                                            cat.CD_CATEGORIA,
+                                            cat.DS_CATEGORIA,
+                                            ch.TP_STATUS,
+                                            (SELECT MAX(reg.CD_REGISTRO)
+                                                FROM controle_chave.REGISTRO reg
+                                                WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS CD_REGISTRO,
+                                            (SELECT COUNT(reg.CD_REGISTRO)
+                                                FROM controle_chave.REGISTRO reg
+                                                WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
+                                            (SELECT reg.CD_USUARIO_MV                 
+                                                FROM controle_chave.REGISTRO reg
+                                                WHERE ch.CD_CHAVE = reg.CD_CHAVE
+                                                    AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
+                                        FROM controle_chave.CHAVE ch
+                                        INNER JOIN controle_chave.CATEGORIA cat
+                                            ON ch.CD_CATEGORIA = cat.CD_CATEGORIA                           
+                                        ) res                                
+                                        LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
+                                            ON vfc.CRACHA = res.RESPONSAVEL_CHAVE) tot";
     
     // APLICA OS FILTROS CASO EXISTA ALGUM, SE FOR ENVIADO COMO ALL, MOSTRA TODOS
-/*     if ($cd_categoria == 'all') {
+    if ($cd_categoria == 'all') {
 
-        $cons_tabela_chave .= " ORDER BY res.CD_CHAVE DESC";
+        $cons_tabela_chave .= " ORDER BY tot.CD_CHAVE DESC";
 
     } else {
 
-        $cons_tabela_chave .= " WHERE res.CD_CATEGORIA = '$cd_categoria'
-                                ORDER BY res.CD_CHAVE DESC";
+        $cons_tabela_chave .= " WHERE tot.CD_CATEGORIA = '$cd_categoria'
+                                ORDER BY tot.CD_CHAVE DESC";
 
     }
- */
+ 
     $res = oci_parse($conn_ora, $cons_tabela_chave);
 
     oci_execute($res);
@@ -63,6 +79,7 @@
         <th class="p-2" style="text-align: center; white-space: nowrap;">Categoria</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Status</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Responsável</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Data de Retirada</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Registros</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">QR Code</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Opções</th>
@@ -105,6 +122,7 @@
                         
                     echo '</td>';
                     echo '<td class="align-middle">'. $row['RESPONSAVEL'] .'</td>';
+                    echo '<td class="align-middle">'. $row['RETIRADA'] .'</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
                     echo '<td onclick="modal_qrcode(' . $row['CD_CHAVE'] . ',\'' . $row['DS_CHAVE'] . '\',\'' . $row['DS_CATEGORIA'] . '\')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 

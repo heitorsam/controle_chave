@@ -33,7 +33,7 @@
     </div>    
 
     <div class="mt-4">
-        <i onclick="toggle_filtro()" style="font-size: 28px; cursor: pointer;" class="fa-solid fa-filter"></i>
+        <i onclick="toggle_filtro()" style="font-size: 20px; cursor: pointer; color: #3185c1;" class="fa-solid fa-filter"></i>
     </div>
 
 </div>

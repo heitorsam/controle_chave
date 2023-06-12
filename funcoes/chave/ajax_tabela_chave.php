@@ -74,6 +74,7 @@
 
     <thead>
 
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Selecione</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Código</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Descrição</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Categoria</th>
@@ -94,6 +95,7 @@
 
                 echo '<tr style="text-align: center">';
 
+                    echo '<td class="align-middle"><input class="ckb-selecionados" value="'.$row['CD_CHAVE'].'"type="checkbox"></td>';
                     echo '<td class="align-middle">'. $row['CD_CHAVE'] .'</td>';
                     echo '<td class="align-middle" id="'. $row['CD_CHAVE'] .'" style="cursor: pointer;" 
                         ondblclick="editar_chave(\''.$row['CD_CHAVE'].'\',\''. $row['DS_CHAVE'] .'\')">'. 

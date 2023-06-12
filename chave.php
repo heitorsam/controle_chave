@@ -30,7 +30,11 @@
 
     <div class="col-md-1 mt-4">
         <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-    </div>    
+    </div>
+
+    <div class="col-md-1 mt-4">
+        <a onclick="imprimir_selecionados()" class="btn btn-primary"><i class="fa-solid fa-print"></i></a>
+    </div>
 
     <div class="mt-4">
         <i onclick="toggle_filtro()" style="font-size: 20px; cursor: pointer; color: #3185c1;" class="fa-solid fa-filter"></i>
@@ -132,6 +136,64 @@ include 'rodape.php';
  
         $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
 
+    }
+
+    function imprimir_selecionados() {
+
+        var chaves_selecionadas = document.getElementsByClassName('ckb-selecionados');
+
+        chaves_selecionadas = Array.from(chaves_selecionadas);
+
+        var ids_checkados = [];
+
+        chaves_selecionadas.forEach(valor => {
+
+            if (valor.checked == true) {
+
+                ids_checkados.push(valor.value);
+
+            }
+
+        })
+
+        gerar_qrcodes_selecionados(ids_checkados);
+
+    }
+    
+    function gerar_qrcodes_selecionados(ids) {
+
+        var container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.flexDirection = 'row';
+        //container.innerHTML = '<label>oi</label>';
+
+        ids.forEach(id => {
+
+            var qrcode = document.createElement('div');
+
+            container.appendChild(qrcode);
+
+            //container.appendChild(qrcode);
+
+            // MONTA O QR CODE
+            var qrcode = new QRCode(qrcode, {
+
+                text: `${id}`,
+                width: 60.26,
+                height: 60.26
+
+            });
+
+        })
+
+        console.log(container)
+
+        var tela_impressao = window.open('about:blank');
+        tela_impressao.document.write(container.outerHTML);
+        setTimeout(function () {
+            tela_impressao.window.print();
+            tela_impressao.window.close();
+        }, 500);
     }
 
     function toggle_filtro() {

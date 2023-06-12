@@ -265,8 +265,15 @@ include 'rodape.php';
         container.style.flexDirection = 'row';
 
         var qrcodeContainer = document.getElementById('qrcode_container');
-        var qrcode = qrcodeContainer.querySelector('espaco_qrcode');
-        var descricao = qrcodeContainer.querySelector('container_labels');
+        var qrcode = qrcodeContainer.getElementsByClassName('espaco_qrcode')[0];
+        var valor = qrcodeContainer.getElementsByClassName('valor')[0];
+        var descricao = qrcodeContainer.getElementsByClassName('container_labels')[0];
+
+        valor.style.textAlign = 'center';
+
+        descricao.style.marginLeft = '8px';
+        descricao.style.position = 'relative';
+        descricao.style.top = '-10px';
 
         var qrCodeContainerClone = qrcodeContainer.cloneNode(true);
 
@@ -489,6 +496,7 @@ include 'rodape.php';
         //ds_categoria_elemento.innerText = ds_categoria;
         valor_texto.innerText = '(' + valor + ')';
         valor_texto.style.fontSize = '9px';
+        valor_texto.className = 'valor';
 
         container_qrcode.appendChild(qrcode);
         container_qrcode.appendChild(valor_texto);
@@ -513,8 +521,8 @@ include 'rodape.php';
         var qrcode = new QRCode(qrcode, {
             //64.26
             text: `${valor}`,
-            width: 55.26,
-            height: 55.26
+            width: 60.26,
+            height: 60.26
 
         });
 

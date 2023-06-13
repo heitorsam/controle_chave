@@ -138,6 +138,35 @@ include 'rodape.php';
 
     }
 
+    function toggle_checkbox() {
+
+        var checkbox_todos = document.getElementById('checkbox_todos');
+        var itens_checkbox = document.getElementsByClassName('ckb-selecionados');
+
+        // TRANSFORMA OS ELEMENTOS HTML EM ARRAY (PARA CONSEGUIR ITERAR)
+        itens_checkbox = Array.from(itens_checkbox);
+
+        // ITERA SOBRE TODOS OS ITENS DE CHECKBOX PARA SETAR O VALOR DE ACORDO COM O VALOR SELECIONADO
+        if (checkbox_todos.checked == true) {
+
+            itens_checkbox.forEach(item => {
+
+                item.checked = true;
+
+            })
+
+        } else {
+
+            itens_checkbox.forEach(item => {
+
+                item.checked = false;
+
+            })
+
+        }
+
+    }
+
     function imprimir_selecionados() {
 
         // PEGA TODOS OS ELEMENTOS QUE POSSUI ESSA CLASSE
@@ -198,7 +227,11 @@ include 'rodape.php';
 
         ids.forEach(id => {
 
+            // CRIA CONTAINERS E TEXTOS
+            var container = tela_impressao.document.createElement('div');
             var container_qrcode = tela_impressao.document.createElement('div');
+            var container_label = tela_impressao.document.createElement('div');
+            var cd_chave = tela_impressao.document.createElement('p');
             var ds_chave = tela_impressao.document.createElement('p');
 
             // CRIA A DIV PARA MONTAR O QR CODE
@@ -213,29 +246,42 @@ include 'rodape.php';
 
             });
 
-            ds_chave.innerHTML = '(' + id['CD_CHAVE'] + ')';
+            // ESTILIZA O ID DA CHAVE E ARMAZENA O VALOR
+            cd_chave.innerHTML = '(' + id['CD_CHAVE'] + ')';
+            cd_chave.style.fontSize = '12px';
+            cd_chave.style.textAlign = 'center';
+            cd_chave.style.marginTop = '2px'
 
+            // ESTILIZA A DS DA CHAVE E ARMAZENA O VALOR
+            ds_chave.innerHTML = id['DS_CHAVE'];
             ds_chave.style.fontSize = '12px';
-            ds_chave.style.textAlign = 'center';
+            ds_chave.style.marginLeft = '5px';
+            ds_chave.style.marginTop= '0px';
 
-            ds_chave.style.marginTop = '2px'
+            // ADICIONA A DS DA CHAVE E ADICIONA NA DIV DA LABEL CRIADA
+            container_label.appendChild(ds_chave);
 
+            // ARMAZENA NO CONTAINER QRCODE O QR CODE E O CD DA CHAVE
             container_qrcode.appendChild(qr_code_div)
-            container_qrcode.appendChild(ds_chave);
+            container_qrcode.appendChild(cd_chave);
+
+            // ADICIONA NO CONTAINER PRINCIPAL OS DOIS CONTAINERS (DO QR CODE E DO TEXTO)
+            container.appendChild(container_qrcode);
+            container.appendChild(container_label);
 
             // ADICIONA A DIV (QRCODE) CRIADO NA TELA DE IMPRESSÃO
-            tela_impressao.document.body.appendChild(container_qrcode);
+            tela_impressao.document.body.appendChild(container);
 
             // DEFINE A ESTRUTURA DE CADA QR CODE GERADO
-            container_qrcode.style.height = '90px';
-            container_qrcode.style.marginLeft = '15px';
-            container_qrcode.style.marginRight = '10px';
-            container_qrcode.style.marginRight = '5px';
-            container_qrcode.style.marginBottom = '15px';
-
+            container.style.display = 'flex';
+            container.style.flexDirection = 'row';
+            container.style.height = '90px';
+            container.style.marginLeft = '22px';
+            container.style.marginRight = '10px';
+            container.style.marginRight = '5px';
+            container.style.marginBottom = '20px';
+        
         })
-
-
 
         setTimeout(function () {
             tela_impressao.window.print();

@@ -140,14 +140,19 @@ include 'rodape.php';
 
     function imprimir_selecionados() {
 
+        // PEGA TODOS OS ELEMENTOS QUE POSSUI ESSA CLASSE
         var chaves_selecionadas = document.getElementsByClassName('ckb-selecionados');
 
+        // TRANSFORMA OS ELEMENTOS HTML EM ARRAY (PARA CONSEGUIR ITERAR)
         chaves_selecionadas = Array.from(chaves_selecionadas);
 
+        // CRIA UM ARRAY AUXILIAR
         var ids_checkados = [];
 
+        // PERCORRE CADA ELEMENTO DA LISTA DE ELEMENTOS
         chaves_selecionadas.forEach(valor => {
 
+            // DESSA LISTA, SE O VALOR DE CHECKED FOR TRUE (TER SIDO FLAGADO), ADICIONA NO ARRAY AUXILIAR O ID (VALUE) DO ELEMENTO
             if (valor.checked == true) {
 
                 ids_checkados.push(valor.value);
@@ -156,7 +161,26 @@ include 'rodape.php';
 
         })
 
-        gerar_qrcodes_selecionados(ids_checkados);
+        $.ajax({
+            url: "funcoes/chave/buscar_infos_chaves.php",
+            method: "GET",
+            data: {
+                ids: ids_checkados
+            },
+            cache: false,
+            success(res) {
+
+                var resposta = JSON.parse(res);
+                //console.log(resposta);
+
+                // CHAMA A FUNÇÃO PARA IMPRIMIR OS QR CODES PASSANDO A LISTA DOS IDS A SEREM GERADOS
+                gerar_qrcodes_selecionados(resposta);
+
+                //console.log(resposta[1]['CD_CHAVE'])
+
+            }
+
+        })
 
     }
     
@@ -174,24 +198,40 @@ include 'rodape.php';
 
         ids.forEach(id => {
 
+            var container_qrcode = tela_impressao.document.createElement('div');
+            var ds_chave = tela_impressao.document.createElement('p');
+
             // CRIA A DIV PARA MONTAR O QR CODE
             var qr_code_div = tela_impressao.document.createElement('div');
 
             // MONTA O QR CODE
             var qrcode = new QRCode(qr_code_div, {
 
-                text: `${id}`,
+                text: `${id['CD_CHAVE']}`,
                 width: 60.26,
                 height: 60.26
 
             });
 
+            ds_chave.innerHTML = '(' + id['CD_CHAVE'] + ')';
+
+            ds_chave.style.fontSize = '12px';
+            ds_chave.style.textAlign = 'center';
+
+            ds_chave.style.marginTop = '2px'
+
+            container_qrcode.appendChild(qr_code_div)
+            container_qrcode.appendChild(ds_chave);
+
             // ADICIONA A DIV (QRCODE) CRIADO NA TELA DE IMPRESSÃO
-            tela_impressao.document.body.appendChild(qr_code_div);
+            tela_impressao.document.body.appendChild(container_qrcode);
 
             // DEFINE A ESTRUTURA DE CADA QR CODE GERADO
-            qr_code_div.style.height = '90px';
-            qr_code_div.style.margin = '10px';
+            container_qrcode.style.height = '90px';
+            container_qrcode.style.marginLeft = '15px';
+            container_qrcode.style.marginRight = '10px';
+            container_qrcode.style.marginRight = '5px';
+            container_qrcode.style.marginBottom = '15px';
 
         })
 

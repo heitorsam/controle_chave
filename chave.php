@@ -162,21 +162,23 @@ include 'rodape.php';
     
     function gerar_qrcodes_selecionados(ids) {
 
-        var container = document.createElement('div');
-        container.style.display = 'flex';
-        container.style.flexDirection = 'row';
-        //container.innerHTML = '<label>oi</label>';
+        var tela_impressao = window.open('about:blank');
+
+        // DEFINE ESTRUTURA DA PÁGINA PARA IMPRESSÃO
+        tela_impressao.document.body.style.width = '700px';
+        tela_impressao.document.body.style.display = 'flex';
+        tela_impressao.document.body.style.flexDirection = 'row';
+        tela_impressao.document.body.style.flexWrap = 'wrap';
+        tela_impressao.document.body.style.alignContent = 'flex-start';
+
 
         ids.forEach(id => {
 
-            var qrcode = document.createElement('div');
-
-            container.appendChild(qrcode);
-
-            //container.appendChild(qrcode);
+            // CRIA A DIV PARA MONTAR O QR CODE
+            var qr_code_div = tela_impressao.document.createElement('div');
 
             // MONTA O QR CODE
-            var qrcode = new QRCode(qrcode, {
+            var qrcode = new QRCode(qr_code_div, {
 
                 text: `${id}`,
                 width: 60.26,
@@ -184,16 +186,22 @@ include 'rodape.php';
 
             });
 
+            // ADICIONA A DIV (QRCODE) CRIADO NA TELA DE IMPRESSÃO
+            tela_impressao.document.body.appendChild(qr_code_div);
+
+            // DEFINE A ESTRUTURA DE CADA QR CODE GERADO
+            qr_code_div.style.height = '90px';
+            qr_code_div.style.margin = '10px';
+
         })
 
-        console.log(container)
 
-        var tela_impressao = window.open('about:blank');
-        tela_impressao.document.write(container.outerHTML);
+
         setTimeout(function () {
             tela_impressao.window.print();
             tela_impressao.window.close();
         }, 500);
+
     }
 
     function toggle_filtro() {

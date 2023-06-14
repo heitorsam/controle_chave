@@ -122,19 +122,26 @@ include 'rodape.php';
     
     //CARREGA PAGINA
     window.onload = function() {
+ 
+        $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
+
+        carrega_tabela_chave(1);
+
+    }
+
+    function carrega_tabela_chave(pagina) {
 
         if (sessionStorage.getItem("categoria") == null) {
 
-            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all');
+            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=all&pagina=' + pagina);
 
         } else {
 
             var valorRecuperado = sessionStorage.getItem("categoria");
-            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+
+            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado + '&pagina=' + pagina);
 
         }
- 
-        $('#carrega_categorias').load('funcoes/categoria/ajax_carrega_categoria_options.php');
 
     }
 
@@ -328,9 +335,7 @@ include 'rodape.php';
         var valor = categoria;
         sessionStorage.setItem("categoria", valor);
 
-        var valorRecuperado = sessionStorage.getItem("categoria");
-
-        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+        carrega_tabela_chave(1);
 
     }
 
@@ -370,7 +375,7 @@ include 'rodape.php';
 
                         if (res == 'Sucesso') {
 
-                            $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+                            carrega_tabela_chave(1);
 
                             //MENSAGEM            
                             var_ds_msg = 'Chave%20alterada%20com%20sucesso.';
@@ -492,7 +497,7 @@ include 'rodape.php';
 
                     if (res == 'Sucesso') {
 
-                        $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+                        carrega_tabela_chave(1);
                         
                         //MENSAGEM            
                         var_ds_msg = 'Chave%20cadastrada%20com%20sucesso.';
@@ -567,9 +572,7 @@ include 'rodape.php';
 
                 if (res == 'Sucesso') {
 
-                    valorRecuperado = sessionStorage.getItem("categoria");
-
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+                    carrega_tabela_chave(1);
 
                     //MENSAGEM            
                     var_ds_msg = 'Status%20alterado%20com%20sucesso.';
@@ -604,11 +607,9 @@ include 'rodape.php';
             cache: false,
             success(res) {
 
-                valorRecuperado = sessionStorage.getItem("categoria");
-
                 if (res === 'Sucesso') {
 
-                    $('#carrega_tabela_chave').load('funcoes/chave/ajax_tabela_chave.php?cdcategoria=' + valorRecuperado);
+                    carrega_tabela_chave(1);
 
                     //MENSAGEM            
                     var_ds_msg = 'Chave%20excluída%20com%20sucesso.';

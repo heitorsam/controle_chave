@@ -218,12 +218,11 @@ include 'rodape.php';
         var tela_impressao = window.open('about:blank');
 
         // DEFINE ESTRUTURA DA PÁGINA PARA IMPRESSÃO
-        tela_impressao.document.body.style.width = '700px';
+        tela_impressao.document.body.style.width = '100%';
         tela_impressao.document.body.style.display = 'flex';
         tela_impressao.document.body.style.flexDirection = 'row';
         tela_impressao.document.body.style.flexWrap = 'wrap';
         tela_impressao.document.body.style.alignContent = 'flex-start';
-
 
         ids.forEach(id => {
 
@@ -280,12 +279,14 @@ include 'rodape.php';
             container.style.marginRight = '10px';
             container.style.marginRight = '5px';
             container.style.marginBottom = '20px';
-        
-        })
+            
+        })        
 
         setTimeout(function () {
+
             tela_impressao.window.print();
             tela_impressao.window.close();
+
         }, 500);
 
     }

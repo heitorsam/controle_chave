@@ -60,6 +60,8 @@ include 'rodape.php';
 
             }, function(data) {
 
+                //alert(data);
+
                 if (data == 'Sucesso') {
 
                     $('#div_usu_resumido').load('funcoes/usuario/ajax_exibe_nm_resumido.php?varcracha=' + cracha.value);

@@ -5,7 +5,7 @@
     $cracha = $_POST['cracha'];
 
     $matricula = substr($cracha, 0, -2);
-
+    
     $cons_funcionario = "SELECT func.NM_FUNCIONARIO
                          FROM dbamv.STA_TB_FUNCIONARIO func
                          WHERE func.CHAPA = $matricula
@@ -22,15 +22,15 @@
 
         $row = oci_fetch_array($res);
 
-        if (!empty($row)) {
-
-            echo 'Sucesso';
-
-       } else {
+        if (strlen($cracha) <> 12 || empty($row) || $row['NM_FUNCIONARIO'] == '' || $row['NM_FUNCIONARIO'] == null || !isset($row['NM_FUNCIONARIO'])) {
 
             echo 'Funcionário não está ativo';
 
-       }
+        } else {
+            
+            echo 'Sucesso';
+
+        }
 
     }
 

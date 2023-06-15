@@ -112,6 +112,8 @@
         var observacao = document.getElementById('inpt_observacao');
         var cracha = document.getElementById('inpt_cracha');
 
+        // REALIZAR VALIDAÇÃO DO CRACHÁ
+
         if (contato.value == '') {
 
             //MENSAGEM            

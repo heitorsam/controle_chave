@@ -91,9 +91,26 @@
                                                         tot.QTD_REGISTROS,
                                                         tot.RESPONSAVEL,
                                                         tot.CD_CATEGORIA,
+                                                        (SELECT resp.DIAS || 'd' || resp.HORAS || 'h' ||
+                                                                resp.MINUTOS || 'm' AS TEMPO
+                                                            FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
+                                                                        FLOOR(MOD(res.DIFF, (24 * 60)) / 60) AS HORAS,
+                                                                        MOD(res.DIFF, 60) AS MINUTOS,
+                                                                        res.CD_CHAVE
+                                                                    FROM (SELECT (TRUNC(SYSDATE) -
+                                                                                TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
+                                                                                EXTRACT(HOUR FROM
+                                                                                        SYSDATE -
+                                                                                        reg.HR_CADASTRO) * 60 +
+                                                                                EXTRACT(MINUTE FROM
+                                                                                        SYSDATE -
+                                                                                        reg.HR_CADASTRO) AS DIFF,
+                                                                                reg.CD_CHAVE
+                                                                            FROM controle_chave.REGISTRO reg
+                                                                        WHERE reg.TP_REGISTRO = 'C') res) resp
+                                                        WHERE resp.CD_CHAVE = tot.CD_CHAVE) AS TEMPO,
                                                         CASE
-                                                        WHEN tot.RESPONSAVEL =
-                                                                'SEM RESPONSÁVEL' THEN
+                                                        WHEN tot.RESPONSAVEL = 'SEM RESPONSÁVEL' THEN
                                                             ''
                                                         ELSE
                                                             TO_CHAR((SELECT reg.HR_CADASTRO
@@ -122,24 +139,20 @@
                                                                         ch.TP_STATUS,
                                                                         (SELECT MAX(reg.CD_REGISTRO)
                                                                             FROM controle_chave.REGISTRO reg
-                                                                        WHERE ch.CD_CHAVE =
-                                                                                reg.CD_CHAVE) AS CD_REGISTRO,
+                                                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS CD_REGISTRO,
                                                                         (SELECT COUNT(reg.CD_REGISTRO)
                                                                             FROM controle_chave.REGISTRO reg
-                                                                        WHERE ch.CD_CHAVE =
-                                                                                reg.CD_CHAVE) AS QTD_REGISTROS,
+                                                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
                                                                         (SELECT reg.CD_USUARIO_MV
                                                                             FROM controle_chave.REGISTRO reg
-                                                                        WHERE ch.CD_CHAVE =
-                                                                                reg.CD_CHAVE
+                                                                        WHERE ch.CD_CHAVE = reg.CD_CHAVE
                                                                             AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
                                                                     FROM controle_chave.CHAVE ch
                                                                 INNER JOIN controle_chave.CATEGORIA cat
                                                                     ON ch.CD_CATEGORIA =
                                                                         cat.CD_CATEGORIA) res
                                                             LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
-                                                            ON vfc.CRACHA =
-                                                                res.RESPONSAVEL_CHAVE) tot
+                                                            ON vfc.CRACHA = res.RESPONSAVEL_CHAVE) tot
                                                 ORDER BY tot.CD_CHAVE DESC) lin) res
                                 ORDER BY res.LINHA ASC) totlin
                         WHERE totlin.LINHA BETWEEN $var2 AND $var1";
@@ -268,6 +281,7 @@
         <th class="p-2" style="text-align: center; white-space: nowrap;">Status</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Responsável</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Data de Retirada</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Registros</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">QR Code</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Opções</th>
@@ -312,6 +326,7 @@
                     echo '</td>';
                     echo '<td class="align-middle">'. $row['RESPONSAVEL'] .'</td>';
                     echo '<td class="align-middle">'. $row['RETIRADA'] .'</td>';
+                    echo '<td class="align-middle">'. $row['TEMPO'] .'</td>';
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
                     echo '<td onclick="modal_qrcode(' . $row['CD_CHAVE'] . ',\'' . $row['DS_CHAVE'] . '\',\'' . $row['DS_CATEGORIA'] . '\')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 

@@ -28,16 +28,10 @@
         </select>
     </div>
 
-    <div class="col-md-1 mt-4">
+    <div class="col-md-4 mt-4">
         <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
-    </div>
-
-    <div class="col-md-1 mt-4">
         <a onclick="imprimir_selecionados()" class="btn btn-primary"><i class="fa-solid fa-print"></i></a>
-    </div>
-
-    <div class="mt-4">
-        <i onclick="toggle_filtro()" style="font-size: 20px; cursor: pointer; color: #3185c1;" class="fa-solid fa-filter"></i>
+        <a onclick="toggle_filtro()" class="btn btn-primary" style="color: white;"><i class="fa-solid fa-filter"></i></a>
     </div>
 
 </div>
@@ -744,7 +738,5 @@ include 'rodape.php';
         });
 
     }
-
-
 
 </script>

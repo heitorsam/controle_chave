@@ -8,54 +8,67 @@
     $pagina = $_GET['pagina'];
 
     $cons_tot = "SELECT COUNT(*) AS QTD
-                    FROM (
-                    SELECT tot.CD_CHAVE,
-                        tot.DS_CHAVE,
-                        tot.DS_CATEGORIA,
-                        tot.TP_STATUS,
-                        tot.QTD_REGISTROS,
-                        tot.RESPONSAVEL,
-                        CASE
+                FROM (SELECT tot.CD_CHAVE,
+                            tot.DS_CHAVE,
+                            tot.DS_CATEGORIA,
+                            tot.TP_STATUS,
+                            tot.QTD_REGISTROS,
+                            tot.RESPONSAVEL,
+                            (SELECT resp.DIAS || 'd' || resp.HORAS || 'h' || resp.MINUTOS || 'm' AS TEMPO
+                                FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
+                                            FLOOR(MOD(res.DIFF, (24 * 60)) / 60) AS HORAS,
+                                            MOD(res.DIFF, 60) AS MINUTOS,
+                                            res.CD_CHAVE
+                                        FROM (SELECT (TRUNC(SYSDATE) - TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
+                                                    EXTRACT(HOUR FROM
+                                                            SYSDATE - reg.HR_CADASTRO) * 60 +
+                                                    EXTRACT(MINUTE FROM
+                                                            SYSDATE - reg.HR_CADASTRO) AS DIFF,
+                                                    reg.CD_CHAVE
+                                                FROM controle_chave.REGISTRO reg
+                                            WHERE reg.TP_REGISTRO = 'C') res) resp
+                            WHERE resp.CD_CHAVE = tot.CD_CHAVE) AS TEMPO,
+                            CASE
                             WHEN tot.RESPONSAVEL = 'SEM RESPONSÁVEL' THEN
-                            ''
+                                ''
                             ELSE
-                            TO_CHAR((SELECT reg.HR_CADASTRO
+                                TO_CHAR((SELECT reg.HR_CADASTRO
                                         FROM controle_chave.REGISTRO reg
-                                    WHERE reg.CD_REGISTRO = tot.CD_REGISTRO),
-                                    'DD/MM/YYYY HH24:MI')
-                        END AS RETIRADA
-                    FROM (SELECT res.CD_CHAVE,
-                                res.DS_CHAVE,
-                                res.CD_CATEGORIA,
-                                res.DS_CATEGORIA,
-                                res.TP_STATUS,
-                                res.QTD_REGISTROS,
-                                res.CD_REGISTRO,
-                                CASE
+                                        WHERE reg.CD_REGISTRO = tot.CD_REGISTRO),
+                                        'DD/MM/YYYY HH24:MI')
+                            END AS RETIRADA
+                        FROM (SELECT res.CD_CHAVE,
+                                    res.DS_CHAVE,
+                                    res.CD_CATEGORIA,
+                                    res.DS_CATEGORIA,
+                                    res.TP_STATUS,
+                                    res.QTD_REGISTROS,
+                                    res.CD_REGISTRO,
+                                    CASE
                                     WHEN res.RESPONSAVEL_CHAVE IS NULL THEN
-                                    'SEM RESPONSÁVEL'
+                                        'SEM RESPONSÁVEL'
                                     ELSE
-                                    vfc.NM_RESUMIDO
-                                END AS RESPONSAVEL
-                            FROM (SELECT ch.CD_CHAVE,
-                                        ch.DS_CHAVE,
-                                        cat.CD_CATEGORIA,
-                                        cat.DS_CATEGORIA,
-                                        ch.TP_STATUS,
-                                        (SELECT MAX(reg.CD_REGISTRO)
-                                            FROM controle_chave.REGISTRO reg
+                                        vfc.NM_RESUMIDO
+                                    END AS RESPONSAVEL
+                                FROM (SELECT ch.CD_CHAVE,
+                                            ch.DS_CHAVE,
+                                            cat.CD_CATEGORIA,
+                                            cat.DS_CATEGORIA,
+                                            ch.TP_STATUS,
+                                            (SELECT MAX(reg.CD_REGISTRO)
+                                                FROM controle_chave.REGISTRO reg
                                             WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS CD_REGISTRO,
-                                        (SELECT COUNT(reg.CD_REGISTRO)
-                                            FROM controle_chave.REGISTRO reg
+                                            (SELECT COUNT(reg.CD_REGISTRO)
+                                                FROM controle_chave.REGISTRO reg
                                             WHERE ch.CD_CHAVE = reg.CD_CHAVE) AS QTD_REGISTROS,
-                                        (SELECT reg.CD_USUARIO_MV
-                                            FROM controle_chave.REGISTRO reg
+                                            (SELECT reg.CD_USUARIO_MV
+                                                FROM controle_chave.REGISTRO reg
                                             WHERE ch.CD_CHAVE = reg.CD_CHAVE
-                                            AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
-                                    FROM controle_chave.CHAVE ch
+                                                AND reg.TP_REGISTRO = 'C') AS RESPONSAVEL_CHAVE
+                                        FROM controle_chave.CHAVE ch
                                     INNER JOIN controle_chave.CATEGORIA cat
                                         ON ch.CD_CATEGORIA = cat.CD_CATEGORIA) res
-                            LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
+                                LEFT JOIN controle_chave.VW_FUNC_CRACHA vfc
                                 ON vfc.CRACHA = res.RESPONSAVEL_CHAVE) tot";
 
     // APLICA OS FILTROS CASO EXISTA ALGUM, SE FOR ENVIADO COMO ALL, MOSTRA TODOS

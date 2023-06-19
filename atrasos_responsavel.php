@@ -26,6 +26,10 @@
             </select>
 
         </div>
+
+        <div class="col-md-4">
+            <a onclick="gera_excel()" class="btn btn-primary"><i class="fa-solid fa-file-excel"></i></a>
+        </div>
         
     </div>
 
@@ -73,6 +77,15 @@
         var filtro_mes_rel = sessionStorage.getItem('filtro_mes_rel');
 
         $('#carrega_tabela_atrasos').load('funcoes/relatorios/ajax_atrasos_responsavel.php?mes=' + filtro_mes_rel + '&cdcategoria=' + cdcategoria);
+
+    }
+
+    function gera_excel() {
+
+        var filtro_mes_rel = sessionStorage.getItem('filtro_mes_rel');
+        var filtro_categoria = sessionStorage.getItem('filtro_categoria_rel');
+
+        window.location.href = 'funcoes/relatorios/excel/gera_excel_atrasos_responsavel.php?cdcategoria=' + filtro_categoria + '&mes=' + filtro_mes_rel;
 
     }
     

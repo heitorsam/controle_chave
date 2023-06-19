@@ -11,7 +11,8 @@ if ($periodo == 'hoje') {
                                             COUNT(reg.CD_REGISTRO) AS QTD
                                     FROM controle_chave.REGISTRO reg
                                     WHERE TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')       
-                                    GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)";
+                                    GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)
+                                    ORDER BY DIA";
 } else {
 
     $cons_armazenamento_diario = "SELECT EXTRACT(MONTH FROM reg.HR_CADASTRO) AS MES,
@@ -19,7 +20,8 @@ if ($periodo == 'hoje') {
                                          COUNT(reg.CD_REGISTRO) AS QTD
                                   FROM controle_chave.REGISTRO reg
                                   WHERE TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') = '$periodo'
-                                  GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)";
+                                  GROUP BY EXTRACT(MONTH FROM reg.HR_CADASTRO), EXTRACT(DAY FROM reg.HR_CADASTRO)
+                                  ORDER BY DIA";
 
 }
 

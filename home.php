@@ -37,7 +37,7 @@
         <a href="categoria.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-folder-tree"></i> Categoria</a></td></tr>
         <span class="espaco_pequeno"></span>
 
-        <!-- <a href="relatorios.php" class="botao_home_adm" type="submit"><i class="fa-regular fa-clipboard"></i> Relatórios</a></td></tr> -->
+        <a href="relatorios.php" class="botao_home_adm" type="submit"><i class="fa-regular fa-clipboard"></i> Relatórios</a></td></tr>
 
     <?php } ?>
 

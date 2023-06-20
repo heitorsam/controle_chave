@@ -2,30 +2,21 @@
 
     include '../../conexao.php';
 
-    $dt_mes_filtro = $_GET['mes'];
-    $cd_categoria = $_GET['cdcategoria'];
-    $cracha = $_GET['cracha'];
+    $cracha = $_GET['filtro_cracha'];
+    $cdcategoria = $_GET['filtro_categoria'];
+    $mes = $_GET['filtro_mes_rel'];
 
     // APLICA AJUSTES PARA NÃO DAR ERRO NA CONSULTA QUANDO USA FUNÇÃO
-    if ($dt_mes_filtro == 'all') {
+    if ($mes == 'all') {
 
-       $dt_mes_filtro = "TO_CHAR(SYSDATE, 'YYYY-MM')";
-
+        $mes = "TO_CHAR(SYSDATE, 'YYYY-MM')";
     } else {
 
-        $dt_mes_filtro = "'" . $dt_mes_filtro . "'";
-
+        $mes = "'" . $mes . "'";
     }
 
-    $cons_relatorio_atrasos = "SELECT tot2.CD_USUARIO_MV,
-                                    func.NM_FUNCIONARIO,
-                                    chv.DS_CHAVE,
-                                    tot2.DT_RETIRADA,
-                                    tot2.DT_DEVOLUCAO,
-                                    tot2.TEMPO_TOTAL,
-                                    tot2.TEMPO_ATRASO,
-                                    tot2.STATUS,
-                                    tot2.TEMPO_ATRASO_MINUTOS
+    $cons_cont_atrasos = "SELECT SUM(tot2.TEMPO_ATRASO_MINUTOS) AS TOT_MIN,
+                                    COUNT(*) AS QTD_ATRASOS
                                 FROM (SELECT tot.*,
                                             CASE
                                             WHEN tot.DT_DEVOLUCAO IS NOT NULL THEN
@@ -36,9 +27,9 @@
                                     FROM (SELECT resp.CD_USUARIO_MV,
                                                     TO_CHAR(resp.HR_CADASTRO, 'DD/MM/YYYY HH24:MI') AS DT_RETIRADA,
                                                     TO_CHAR(resp.HR_ULT_ALT, 'DD/MM/YYYY HH24:MI') AS DT_DEVOLUCAO,
+                                                    
                                                     resp.DIAS || 'd' || resp.HORAS || 'h' || resp.MINUTOS || 'm' AS TEMPO_TOTAL,
-                                                    resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' ||
-                                                    resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
+                                                    resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' || resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
                                                     resp.TEMPO_ATRASO_MINUTOS,
                                                     resp.CD_CHAVE
                                             FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
@@ -77,7 +68,7 @@
                                                             FROM controle_chave.REGISTRO reg
                                                             WHERE reg.TP_REGISTRO = 'D'
                                                                 AND TO_CHAR(reg.HR_ULT_ALT, 'YYYY-MM') =
-                                                                    $dt_mes_filtro) res) resp
+                                                                    $mes) res) resp
                                             WHERE resp.DIAS > 0
                                                 OR resp.HORAS >= 12
                                             
@@ -87,8 +78,7 @@
                                                     TO_CHAR(resp.HR_CADASTRO, 'DD/MM/YYYY HH24:MI') AS DT_RETIRADA,
                                                     TO_CHAR(resp.HR_ULT_ALT, 'DD/MM/YYYY HH24:MI') AS DT_DEVOLUCAO,
                                                     resp.DIAS || 'd' || resp.HORAS || 'h' || resp.MINUTOS || 'm' AS TEMPO_TOTAL,
-                                                    resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' ||
-                                                    resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
+                                                    resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' || resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
                                                     resp.TEMPO_ATRASO_MINUTOS,
                                                     resp.CD_CHAVE
                                             FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
@@ -107,14 +97,12 @@
                                                                             SYSDATE - reg.HR_CADASTRO) * 60 +
                                                                     EXTRACT(MINUTE FROM
                                                                             SYSDATE - reg.HR_CADASTRO) AS DIFF,
-                                                                    ((TRUNC(SYSDATE) -
-                                                                    TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
+                                                                    ((TRUNC(SYSDATE) - TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
                                                                     EXTRACT(HOUR FROM
                                                                             SYSDATE - reg.HR_CADASTRO) * 60 +
                                                                     EXTRACT(MINUTE FROM
                                                                             SYSDATE - reg.HR_CADASTRO)) - 720 AS TEMPO_ATRASO,
-                                                                    ((TRUNC(SYSDATE) -
-                                                                    TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
+                                                                    ((TRUNC(SYSDATE) - TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
                                                                     EXTRACT(HOUR FROM
                                                                             SYSDATE - reg.HR_CADASTRO) * 60 +
                                                                     EXTRACT(MINUTE FROM
@@ -126,7 +114,7 @@
                                                             FROM controle_chave.REGISTRO reg
                                                             WHERE reg.TP_REGISTRO = 'C'
                                                                 AND TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') =
-                                                                    $dt_mes_filtro) res) resp
+                                                                    $mes) res) resp
                                             WHERE resp.DIAS > 0
                                                 OR resp.HORAS >= 12) tot) tot2
                                 INNER JOIN (SELECT CASE
@@ -144,58 +132,25 @@
                                 ON tot2.CD_CHAVE = chv.CD_CHAVE
                                 INNER JOIN controle_chave.CATEGORIA cat
                                 ON chv.CD_CATEGORIA = cat.CD_CATEGORIA
-                                WHERE cat.CD_CATEGORIA = $cd_categoria";
+                                WHERE tot2.CD_USUARIO_MV = '$cracha'
+                                    AND cat.CD_CATEGORIA = '$cdcategoria'";
 
-    if ($cracha != 'all' && $cracha != '') {
+    $res_cons_cont_atrasos = oci_parse($conn_ora, $cons_cont_atrasos);
+    $valida = oci_execute($res_cons_cont_atrasos);
 
-        $cons_relatorio_atrasos .= "AND tot2.CD_USUARIO_MV = '$cracha'";
+    if (!$valida) {
 
+        echo 'Erro';
+
+    } else {
+
+        if ($row = oci_fetch_assoc($res_cons_cont_atrasos)) {
+      
+            $json = json_encode($row);
+            
+            echo $json;
+            
+        }
     }
 
-    $res_cons_atrasos = oci_parse($conn_ora, $cons_relatorio_atrasos);
-    oci_execute($res_cons_atrasos);
-
-
 ?>
-
-<table class="table table-striped" style="text-align: center">
-
-    <thead>
-
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Crachá</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Nome</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Chave</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Data da Retirada</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Data da Devolução</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo Total</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo em Atraso</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Status</th>
-
-    </thead>
-
-    <tbody>
-
-        <?php
-
-            while($row = oci_fetch_array($res_cons_atrasos)) { 
-
-                echo '<tr style="text-align: center">';
-
-                    echo '<td class="align-middle">'. $row['CD_USUARIO_MV'] .'</td>';
-                    echo '<td class="align-middle">'. $row['NM_FUNCIONARIO'] .'</td>';
-                    echo '<td class="align-middle">'. $row['DS_CHAVE'] .'</td>';
-                    echo '<td class="align-middle">'. $row['DT_RETIRADA'] .'</td>';
-                    echo '<td class="align-middle">'. $row['DT_DEVOLUCAO'] .'</td>';
-                    echo '<td class="align-middle">'. $row['TEMPO_TOTAL'] .'</td>';
-                    echo '<td class="align-middle">'. $row['TEMPO_ATRASO'] .'</td>';
-                    echo '<td class="align-middle">'. $row['STATUS'] .'</td>';
-
-                echo '</tr>';
-                
-            }
-
-        ?>
-
-    </tbody>
-
-</table>

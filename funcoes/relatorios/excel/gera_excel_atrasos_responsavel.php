@@ -9,6 +9,7 @@ include '../../../conexao.php';
 
 $cd_categoria = $_GET['cdcategoria'];
 $dt_mes_filtro = $_GET['mes'];
+$cracha = $_GET['cracha'];
 
 // APLICA AJUSTES PARA NÃO DAR ERRO NA CONSULTA QUANDO USA FUNÇÃO
 if ($dt_mes_filtro == 'all') {
@@ -19,7 +20,7 @@ if ($dt_mes_filtro == 'all') {
     $dt_mes_filtro = "'" . $dt_mes_filtro . "'";
 }
 
-$cons_relatorio_atrasos = "SELECT tot2.CD_USUARIO_MV,
+$cons_relatorio_atrasos = "SELECT    tot2.CD_USUARIO_MV AS CD_USUARIO_MV,
                                      func.NM_FUNCIONARIO,
                                      chv.DS_CHAVE,
                                      tot2.DT_RETIRADA,
@@ -85,7 +86,7 @@ $cons_relatorio_atrasos = "SELECT tot2.CD_USUARIO_MV,
                                              
                                              UNION ALL
                                              
-                                             SELECT resp.CD_USUARIO_MV,
+                                             SELECT  resp.CD_USUARIO_MV AS CD_USUARIO_MV,
                                                      TO_CHAR(resp.HR_CADASTRO, 'DD/MM/YYYY HH24:MI') AS DT_RETIRADA,
                                                      TO_CHAR(resp.HR_ULT_ALT, 'DD/MM/YYYY HH24:MI') AS DT_DEVOLUCAO,
                                                      resp.DIAS || 'd' || resp.HORAS || 'h' || resp.MINUTOS || 'm' AS TEMPO_TOTAL,
@@ -148,8 +149,15 @@ $cons_relatorio_atrasos = "SELECT tot2.CD_USUARIO_MV,
                                  ON chv.CD_CATEGORIA = cat.CD_CATEGORIA
                                  WHERE cat.CD_CATEGORIA = $cd_categoria";
 
-$res_cons_atrasos = oci_parse($conn_ora, $cons_relatorio_atrasos);
-oci_execute($res_cons_atrasos);
+        if ($cracha != 'all' && $cracha != '') {
+
+        $cons_relatorio_atrasos .= "AND tot2.CD_USUARIO_MV = '$cracha'";
+
+        }
+
+
+        $res_cons_atrasos = oci_parse($conn_ora, $cons_relatorio_atrasos);
+        oci_execute($res_cons_atrasos);
 
 ?>
 
@@ -174,16 +182,16 @@ oci_execute($res_cons_atrasos);
 
         while ($row = oci_fetch_array($res_cons_atrasos)) {
 
-            echo '<tr style="text-align: center">';
+            echo "<tr style='text-align: center'>";
 
-            echo '<td class="align-middle">' . $row['CD_USUARIO_MV'] . '</td>';
-            echo '<td class="align-middle">' . $row['NM_FUNCIONARIO'] . '</td>';
-            echo '<td class="align-middle">' . $row['DS_CHAVE'] . '</td>';
-            echo '<td class="align-middle">' . $row['DT_RETIRADA'] . '</td>';
-            echo '<td class="align-middle">' . $row['DT_DEVOLUCAO'] . '</td>';
-            echo '<td class="align-middle">' . $row['TEMPO_TOTAL'] . '</td>';
-            echo '<td class="align-middle">' . $row['TEMPO_ATRASO'] . '</td>';
-            echo '<td class="align-middle">' . $row['STATUS'] . '</td>';
+                echo "<td class='align-middle'>" . strval($row['CD_USUARIO_MV']) . "</td>";
+                echo '<td class="align-middle">' . $row['NM_FUNCIONARIO'] . '</td>';
+                echo '<td class="align-middle">' . $row['DS_CHAVE'] . '</td>';
+                echo '<td class="align-middle">' . $row['DT_RETIRADA'] . '</td>';
+                echo '<td class="align-middle">' . $row['DT_DEVOLUCAO'] . '</td>';
+                echo '<td class="align-middle">' . $row['TEMPO_TOTAL'] . '</td>';
+                echo '<td class="align-middle">' . $row['TEMPO_ATRASO'] . '</td>';
+                echo '<td class="align-middle">' . $row['STATUS'] . '</td>';
 
             echo '</tr>';
         }

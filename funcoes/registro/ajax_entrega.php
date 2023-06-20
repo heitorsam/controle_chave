@@ -104,6 +104,12 @@
 
     })
 
+    function abrir_modal_assinatura() {
+
+        $('#modal_assinatura').modal('show')
+
+    }
+
     function registrar_entrega() {
 
         var setor = document.getElementById('selecao_setores');

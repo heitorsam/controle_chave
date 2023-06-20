@@ -88,6 +88,7 @@
 
                                 <a class="dropdown-item" href="chave.php"><i class="fa-solid fa-key"></i> Chave</a>
                                 <a class="dropdown-item" href="categoria.php"><i class="fa-solid fa-folder-tree"></i> Categoria</a>
+                                <a class="dropdown-item" href="relatorios.php"><i class="fa-regular fa-clipboard"></i> Relatórios</a>
 
                             <?php } ?>
 

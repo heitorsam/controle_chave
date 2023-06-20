@@ -101,10 +101,7 @@ $cons_armazenamento_mensal = "SELECT EXTRACT(YEAR FROM reg.HR_CADASTRO) AS ANO,
                 legend: {
                     position: 'top',
                 },
-                //title: {
-                //    display: true,
-                //    text: 'Consolidado Mensal'
-                //}
+
             }
         },
     });
@@ -121,6 +118,7 @@ $cons_armazenamento_mensal = "SELECT EXTRACT(YEAR FROM reg.HR_CADASTRO) AS ANO,
             while ($row = oci_fetch_array($resp)) {
 
                 echo $row['DIA'] . ',';
+                
             }
             ?>
 
@@ -153,10 +151,6 @@ $cons_armazenamento_mensal = "SELECT EXTRACT(YEAR FROM reg.HR_CADASTRO) AS ANO,
                 legend: {
                     position: 'top',
                 },
-                //title: {
-                //    display: true,
-                //    text: 'Consolidado Mensal'
-                //}
             }
         },
     });

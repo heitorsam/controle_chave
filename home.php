@@ -24,15 +24,15 @@
     <a href="registro.php" class="botao_home" type="submit"><i class="fa-solid fa-address-card"></i> Registro</a></td></tr>
     <span class="espaco_pequeno"></span>
 
+    <a href="chave.php" class="botao_home" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>
+    <span class="espaco_pequeno"></span>
+
     <div class="div_br"></div>
 
     <?php if($_SESSION['SN_USUARIO_ADM'] == 'S'){ ?>
 
         <h11 style="margin-left: 10px;"><i class="fa-solid fa-user-gear"></i> Administrador</h11>
         <div class="div_br"></div>
-
-        <a href="chave.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-key"></i> Chave</a></td></tr>
-        <span class="espaco_pequeno"></span>
 
         <a href="categoria.php" class="botao_home_adm" type="submit"><i class="fa-solid fa-folder-tree"></i> Categoria</a></td></tr>
         <span class="espaco_pequeno"></span>

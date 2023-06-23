@@ -1,7 +1,7 @@
 <?php
 
     include 'cabecalho.php';
-    include 'acesso_restrito_adm.php';
+    //include 'acesso_restrito_adm.php';
     include 'config/mensagem/ajax_mensagem_alert.php';
 
 ?>
@@ -14,27 +14,42 @@
 
 <div class="div_br"></div>
 
-<div class="row">
+<?php if($_SESSION['SN_USUARIO_ADM'] == 'S') {?>
 
-    <div class="col-md-3">
-        Descrição:
-        <input id="descricao" class="form form-control">
+    <div class="row">
+
+        <div class="col-md-3">
+            Descrição:
+            <input id="descricao" class="form form-control">
+        </div>
+
+        <div class="col-md-3">
+            Categoria:
+            <select id="carrega_categorias" class="form form-control">
+
+            </select>
+        </div>
+
+        <div class="col-md-4 mt-4">
+            <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+            <a onclick="imprimir_selecionados()" class="btn btn-primary"><i class="fa-solid fa-print"></i></a>
+            <a onclick="toggle_filtro()" class="btn btn-primary" style="color: white;"><i class="fa-solid fa-filter"></i></a>
+        </div>
+
     </div>
 
-    <div class="col-md-3">
-        Categoria:
-        <select id="carrega_categorias" class="form form-control">
+<?php } ?>
 
-        </select>
-    </div>
+<?php if($_SESSION['SN_USUARIO_ADM'] != 'S') {?>
 
-    <div class="col-md-4 mt-4">
-        <a onclick="cadastra_chave()" class="btn btn-primary"><i class="fa-solid fa-plus"></i></a>
+    <div style="float: right;">
+
         <a onclick="imprimir_selecionados()" class="btn btn-primary"><i class="fa-solid fa-print"></i></a>
         <a onclick="toggle_filtro()" class="btn btn-primary" style="color: white;"><i class="fa-solid fa-filter"></i></a>
+
     </div>
 
-</div>
+<?php  } ?>
 
 <div class="div_br"></div>
 

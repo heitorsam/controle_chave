@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     include '../../conexao.php';
 
     include '../../config/mensagem/ajax_mensagem_alert.php';
@@ -297,7 +299,9 @@
         <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Registros</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">QR Code</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Opções</th>
+        <?php if($_SESSION['SN_USUARIO_ADM'] == 'S') { ?>
+            <th class="p-2" style="text-align: center; white-space: nowrap;">Opções</th>
+        <?php } ?>
 
     </thead>
 
@@ -311,10 +315,21 @@
 
                     echo '<td class="align-middle"><input class="check_box ckb-selecionados" value="'.$row['CD_CHAVE'].'"type="checkbox"></td>';
                     echo '<td class="align-middle">'. $row['CD_CHAVE'] .'</td>';
-                    echo '<td class="align-middle" id="'. $row['CD_CHAVE'] .'" style="cursor: pointer;" 
-                        ondblclick="editar_chave(\''.$row['CD_CHAVE'].'\',\''. $row['DS_CHAVE'] .'\')">'. 
-                            $row['DS_CHAVE'] 
-                        .'</td>';
+
+                    if($_SESSION['SN_USUARIO_ADM'] == 'S') {
+
+                        echo '<td class="align-middle" id="'. $row['CD_CHAVE'] .'" style="cursor: pointer;" 
+                            ondblclick="editar_chave(\''.$row['CD_CHAVE'].'\',\''. $row['DS_CHAVE'] .'\')">'. 
+                                $row['DS_CHAVE'] 
+                            .'</td>';
+                    } else {
+
+                        echo '<td class="align-middle" id="'. $row['CD_CHAVE'] .'">'. 
+                                $row['DS_CHAVE'] 
+                            .'</td>';
+
+                    }
+
                     echo '<td class="align-middle">'. $row['DS_CATEGORIA'] .'</td>';
                     echo '<td class="align-middle">';
 
@@ -322,14 +337,29 @@
 
                             $tp_acao = 'stt';
 
-                            echo '<i style="cursor: pointer; font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
+                            if($_SESSION['SN_USUARIO_ADM'] == 'S') {
+
+                                echo '<i style="cursor: pointer; font-size: 25px; color: green;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-on"></i>';
+
+                            } else {
+
+                                echo '<i style="font-size: 25px; color: #A4A4A4;" class="fa-solid fa-toggle-on"></i>';
+
+                            }
 
                         } else if ($row['TP_STATUS'] != 'A'  && $row['RESPONSAVEL'] == 'SEM RESPONSÁVEL') {
 
                             $tp_acao = 'stt';
 
-                            echo '<i style="cursor: pointer; font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
+                            if($_SESSION['SN_USUARIO_ADM'] == 'S') {
 
+                                echo '<i style="cursor: pointer; font-size: 25px; color: #e05757;" onclick="chama_alerta(' . $row['CD_CHAVE'] . ',\'' . $tp_acao . '\',\'' . $row['TP_STATUS'] . '\')" class="fa-solid fa-toggle-off"></i>';
+
+                            } else {
+
+                                echo '<i style="font-size: 25px; color: #A4A4A4;" class="fa-solid fa-toggle-off"></i>';
+
+                            }
                         } else {
 
                             echo '<i style="font-size: 25px; color: #A4A4A4;" class="fa-solid fa-toggle-on"></i>';
@@ -343,21 +373,25 @@
                     echo '<td class="align-middle">'. $row['QTD_REGISTROS'] .'</td>';
                     echo '<td onclick="modal_qrcode(' . $row['CD_CHAVE'] . ',\'' . $row['DS_CHAVE'] . '\',\'' . $row['DS_CATEGORIA'] . '\')" class="align-middle"><button class="btn btn-primary"><i class="fa-solid fa-qrcode"></i></button></td>';
 
-                    echo '<td class="align-middle">';
+                    if($_SESSION['SN_USUARIO_ADM'] == 'S') {
 
-                        if ($row['QTD_REGISTROS'] == 0) {
+                        echo '<td class="align-middle">';
 
-                            $tp_acao = 'del';
+                            if ($row['QTD_REGISTROS'] == 0) {
 
-                            echo '<button onclick="chama_alerta('.  $row['CD_CHAVE'] . ',\'' . $tp_acao . '\')" class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button>';
+                                $tp_acao = 'del';
 
-                        } else {
+                                echo '<button onclick="chama_alerta('.  $row['CD_CHAVE'] . ',\'' . $tp_acao . '\')" class="btn btn-adm"> <i class="fa-solid fa-trash-can"></i></button>';
 
-                            echo ' <button class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i></button>';
+                            } else {
 
-                        }
+                                echo ' <button class="btn btn-secondary"><i class="fa-solid fa-trash-can"></i></button>';
 
-                    echo '</td>';
+                            }
+
+                        echo '</td>';
+
+                    }
 
                 echo '</tr>';
 

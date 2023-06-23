@@ -93,7 +93,7 @@
 
 <script>
 
-    var selecione = document.getElementById('selecione');
+/*     var selecione = document.getElementById('selecione');
     var selecao_setores = document.getElementById('carrega_categorias');
 
     selecao_setores.addEventListener('change', function() {
@@ -101,5 +101,5 @@
         selecione.parentNode.removeChild(selecione);
 
     })    
-
+ */
 </script>

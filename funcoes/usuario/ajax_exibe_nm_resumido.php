@@ -20,7 +20,7 @@
     if($tamanho_nm_final_resumido > 5){
 
         echo 'Usuário:';
-        echo '<input id="inpt_cracha" type="text" value="' . $nm_final_resumido . '" class="form form-control" readonly>';
+        echo '<input id="nm_func_resumido" type="text" value="' . $nm_final_resumido . '" class="form form-control" readonly>';
 
     }
 ?>

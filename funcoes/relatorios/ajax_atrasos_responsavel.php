@@ -20,6 +20,8 @@
     $cons_relatorio_atrasos = "SELECT tot2.CD_USUARIO_MV,
                                     func.NM_FUNCIONARIO,
                                     chv.DS_CHAVE,
+                                    tot2.NR_RAMAL,
+                                    tot2.NR_CONTATO,
                                     tot2.DT_RETIRADA,
                                     tot2.DT_DEVOLUCAO,
                                     tot2.TEMPO_TOTAL,
@@ -40,7 +42,9 @@
                                                     resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' ||
                                                     resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
                                                     resp.TEMPO_ATRASO_MINUTOS,
-                                                    resp.CD_CHAVE
+                                                    resp.CD_CHAVE,
+                                                    resp.NR_RAMAL, 
+                                                    resp.NR_CONTATO
                                             FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
                                                             FLOOR(MOD(res.DIFF, (24 * 60)) / 60) AS HORAS,
                                                             MOD(res.DIFF, 60) AS MINUTOS,
@@ -51,7 +55,9 @@
                                                             res.HR_CADASTRO,
                                                             res.HR_ULT_ALT,
                                                             res.TEMPO_ATRASO_MINUTOS,
-                                                            res.CD_CHAVE
+                                                            res.CD_CHAVE,
+                                                            res.NR_RAMAL,
+                                                            res.NR_CONTATO
                                                     FROM (SELECT (TRUNC(reg.HR_ULT_ALT) -
                                                                     TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
                                                                     EXTRACT(HOUR FROM
@@ -73,7 +79,9 @@
                                                                     reg.CD_USUARIO_MV,
                                                                     reg.HR_CADASTRO,
                                                                     reg.HR_ULT_ALT,
-                                                                    reg.CD_CHAVE
+                                                                    reg.CD_CHAVE,
+                                                                    reg.NR_RAMAL,
+                                                                    reg.NR_CONTATO
                                                             FROM controle_chave.REGISTRO reg
                                                             WHERE reg.TP_REGISTRO = 'D'
                                                                 AND TO_CHAR(reg.HR_ULT_ALT, 'YYYY-MM') =
@@ -90,7 +98,9 @@
                                                     resp.DIAS_ATRASO || 'd' || resp.HORAS_ATRASO || 'h' ||
                                                     resp.MINUTOS_ATRASO || 'm' AS TEMPO_ATRASO,
                                                     resp.TEMPO_ATRASO_MINUTOS,
-                                                    resp.CD_CHAVE
+                                                    resp.CD_CHAVE,
+                                                    resp.NR_RAMAL,
+                                                    resp.NR_CONTATO
                                             FROM (SELECT FLOOR(res.DIFF / (24 * 60)) AS DIAS,
                                                             FLOOR(MOD(res.DIFF, (24 * 60)) / 60) AS HORAS,
                                                             MOD(res.DIFF, 60) AS MINUTOS,
@@ -101,7 +111,9 @@
                                                             res.HR_CADASTRO,
                                                             res.HR_ULT_ALT,
                                                             res.TEMPO_ATRASO_MINUTOS,
-                                                            res.CD_CHAVE
+                                                            res.CD_CHAVE,
+                                                            res.NR_RAMAL,
+                                                            res.NR_CONTATO
                                                     FROM (SELECT (TRUNC(SYSDATE) - TRUNC(reg.HR_CADASTRO)) * 24 * 60 +
                                                                     EXTRACT(HOUR FROM
                                                                             SYSDATE - reg.HR_CADASTRO) * 60 +
@@ -122,7 +134,9 @@
                                                                     reg.CD_USUARIO_MV,
                                                                     reg.HR_CADASTRO,
                                                                     reg.HR_ULT_ALT,
-                                                                    reg.CD_CHAVE
+                                                                    reg.CD_CHAVE,
+                                                                    reg.NR_RAMAL,
+                                                                    reg.NR_CONTATO
                                                             FROM controle_chave.REGISTRO reg
                                                             WHERE reg.TP_REGISTRO = 'C'
                                                                 AND TO_CHAR(reg.HR_CADASTRO, 'YYYY-MM') =
@@ -163,10 +177,12 @@
     <thead>
 
         <th class="p-2" style="text-align: center; white-space: nowrap;">Crachá</th>
-        <th class="p-2" style="text-align: center; white-space: nowrap;">Nome</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Responsável</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Chave</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Data da Retirada</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Data da Devolução</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Ramal</th>
+        <th class="p-2" style="text-align: center; white-space: nowrap;">Contato</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo Total</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Tempo em Atraso</th>
         <th class="p-2" style="text-align: center; white-space: nowrap;">Status</th>
@@ -186,6 +202,8 @@
                     echo '<td class="align-middle">'. $row['DS_CHAVE'] .'</td>';
                     echo '<td class="align-middle">'. $row['DT_RETIRADA'] .'</td>';
                     echo '<td class="align-middle">'. $row['DT_DEVOLUCAO'] .'</td>';
+                    echo '<td class="align-middle">'. $row['NR_RAMAL'] .'</td>';
+                    echo '<td class="align-middle">'. $row['NR_CONTATO'] .'</td>';
                     echo '<td class="align-middle">'. $row['TEMPO_TOTAL'] .'</td>';
                     echo '<td class="align-middle">'. $row['TEMPO_ATRASO'] .'</td>';
                     echo '<td class="align-middle">'. $row['STATUS'] .'</td>';

@@ -98,13 +98,13 @@ include 'rodape.php';
 
                                         if (ds_chave.indexOf(' ') != -1) {
 
-                                            ds_chave = ds_chave.replace(' ', '%20');
+                                            ds_chave = ds_chave.replace(/ /g, '%20');
 
                                         }
 
                                         if (ds_categoria.indexOf(' ') != -1) {
 
-                                            ds_categoria = ds_categoria.replace(' ', '%20');
+                                            ds_categoria = ds_categoria.replace(/ /g, '%20');
 
                                         }
 

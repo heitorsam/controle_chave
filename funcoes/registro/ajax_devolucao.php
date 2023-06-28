@@ -2,7 +2,7 @@
 
     $chave = $_GET['chave'];
     $categoria = $_GET['categoria'];
-    $cd_chave = $_GET['cdchave']
+    $cd_chave = $_GET['cdchave'];
 
 ?>
 

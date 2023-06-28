@@ -1,3 +1,33 @@
+<?php
+
+    include '../../conexao.php';
+
+    // PEGA A DATA PARA RENDERIZAR NA MODAL DE TERMO
+    $cons_data = "SELECT EXTRACT(DAY FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) AS DIA,
+                    CASE
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 1 THEN 'Janeiro'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 2 THEN 'Fevereiro'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 3 THEN 'Marlo'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 4 THEN 'Abril'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 5 THEN 'Maio' 
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 6 THEN 'Junho'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 7 THEN 'Julho'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 8 THEN 'Agosto'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 9 THEN 'Setembro'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 10 THEN 'Outubro'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 11 THEN 'Novembro'
+                        WHEN EXTRACT(MONTH FROM TO_DATE(SYSDATE, 'DD/MM/YYYY')) = 12 THEN 'Dezembro'   
+                    END AS MES,
+                    EXTRACT(YEAR FROM TO_DATE(SYSDATE, 'DD/MM/YY')) AS ANO
+                FROM DUAL";
+
+    $res_cons_data = oci_parse($conn_ora, $cons_data);
+    oci_execute($res_cons_data);
+
+    $resp_data = oci_fetch_assoc($res_cons_data);
+
+?>
+
 <!--MODAL TERMO-->
 <div class="modal fade" id="modal_termo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
@@ -16,6 +46,8 @@
             </div>
 
             <div id="conteudo_modal" class="modal-body">
+
+                <div id="resp_acao"></div>
 
                 <div class="row">
 
@@ -71,14 +103,14 @@
 
                 <div>
 
-                    <input name="tp_cadeado" value="S" type="radio" style="font-size: 3px;"> 
+                    <input id="cad_santacasa" name="tp_cadeado" value="S" type="radio" style="font-size: 3px;"> 
                     <label>CADEADO DA SANTA CASA</label>
 
                 </div>
 
                 <div>
 
-                    <input name="tp_cadeado" value="P" type="radio" style="font-size: 3px;"> 
+                    <input id="cad_particular" name="tp_cadeado" value="P" type="radio" style="font-size: 3px;"> 
                     <label>CADEADO PARTICULAR (FUNCIONARIO)</label>
 
                 </div>
@@ -92,7 +124,7 @@
 
                 <div>
 
-                    São José dos Campos, 21 de Junho de 2023
+                    São José dos Campos, <?php echo $resp_data['DIA'] ?> de <?php echo $resp_data['MES'] ?> de <?php echo $resp_data['ANO'] ?>
 
                 </div>
 

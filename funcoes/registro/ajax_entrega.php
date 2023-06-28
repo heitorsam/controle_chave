@@ -122,27 +122,69 @@
     function verificar_proxima_etapa() {
 
         // BUSCAR PELA CHAVE, O CD CATEGORIA, VERIFICAR SE O CD CATEGORIA É DOS EPIS E SE NÃO TEM NENHUMA ASSINATURA
+        var cracha_cons_assinatura = document.getElementById('inpt_cracha').value;
 
-        var ds_categoria = document.getElementById('ds_categoria').value;
+        $.ajax({
+            url: "funcoes/registro/verificar_existe_assinatura.php",
+            method: "GET",
+            data: {
+                cracha: cracha_cons_assinatura
+            },
+            cache: false,
+            success(res) {
 
-        if (ds_categoria == 'Armário EPIs') {
+                if (res == 'S' || res == 'N') {
 
-            $('#modal_termo').modal('show');
+                    var ds_categoria = document.getElementById('ds_categoria').value;
+            
+                    if (ds_categoria == 'Armário EPIs' && res == 'S') {
+            
+                        $('#modal_termo').modal('show');
+            
+                    } else {
+            
+                        registrar_entrega();
+            
+                    }
 
-        } else {
+                } else {
 
-            registrar_entrega();
+                    //MENSAGEM            
+                    var_ds_msg = 'Erro%20ao%20prosseguir%20registro.';
+                    var_tp_msg = 'alert-danger';
 
-        }
+                    $('#mensagem_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
+
+
+                }
+
+            }
+        })
     
     }
 
     function abrir_modal_assinatura() {
 
-        $('#modal_termo').modal('hide');
-        $('#modal_assinatura').modal('show');
+        var cad_santacasa = document.getElementById('cad_santacasa');
+        var cad_particular = document.getElementById('cad_particular');
 
-        inicializarCanvasAssinatura();
+        // OBRIGA A PREENCHER ALGUM TIPO DE CADEADO PARA PROSSEGUIR
+        if (cad_santacasa.checked == true || cad_particular.checked == true) {
+
+            $('#modal_termo').modal('hide');
+            $('#modal_assinatura').modal('show');
+    
+            inicializarCanvasAssinatura();
+
+        } else {
+
+            //MENSAGEM            
+            var_ds_msg = 'Necessário%20preenchimento%20do%20tipo%20de%20cadeado.';
+            var_tp_msg = 'alert-danger';
+
+            $('#resp_acao').load('config/mensagem/ajax_mensagem_acoes.php?ds_msg=' + var_ds_msg + '&tp_msg=' + var_tp_msg);
+
+        }
 
     }
 
